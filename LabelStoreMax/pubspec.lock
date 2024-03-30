@@ -229,10 +229,10 @@ packages:
     dependency: transitive
     description:
       name: dio
-      sha256: "50fec96118958b97c727d0d8f67255d3683f16cc1f90d9bc917b5d4fe3abeca9"
+      sha256: "0978e9a3e45305a80a7210dbeaf79d6ee8bee33f70c8e542dc654c952070217f"
       url: "https://pub.dev"
     source: hosted
-    version: "5.4.2"
+    version: "5.4.2+1"
   encrypt:
     dependency: transitive
     description:
@@ -697,18 +697,18 @@ packages:
     dependency: "direct main"
     description:
       name: nylo_framework
-      sha256: "6a46d9d48c59aa3e4e50e78dc9b738d4cf98b2cda4abc98cf5fc42a612e730f0"
+      sha256: "118352b66ed92b306eeaa07c2ce637d84b67d36cb536b3a6d8229c8c7f551057"
       url: "https://pub.dev"
     source: hosted
-    version: "5.24.2"
+    version: "5.24.4"
   nylo_support:
     dependency: transitive
     description:
       name: nylo_support
-      sha256: "837ebdc972916006be78d9a77c7ed9c1a99d6266df92dc32cbdd89f56905d617"
+      sha256: "1bdbea11f84a537db9a6344fc2e2c0521385a67a932b574676791100d7beda45"
       url: "https://pub.dev"
     source: hosted
-    version: "5.60.0"
+    version: "5.61.0"
   octo_image:
     dependency: transitive
     description:
@@ -1238,10 +1238,10 @@ packages:
     dependency: "direct main"
     description:
       name: wp_json_api
-      sha256: bb46458abc933cf47d3c7559f918d3580e0577975ac061e777780edd52c08614
+      sha256: "6c32c5d59626b63a80d461afdc5f4ba36a0eaba490c3d772632e7aaf8462ddc7"
       url: "https://pub.dev"
     source: hosted
-    version: "3.5.2"
+    version: "3.5.3"
   xdg_directories:
     dependency: transitive
     description:
@@ -1267,5 +1267,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.3.0 <4.0.0"
+  dart: ">=3.3.2 <4.0.0"
   flutter: ">=3.16.0"

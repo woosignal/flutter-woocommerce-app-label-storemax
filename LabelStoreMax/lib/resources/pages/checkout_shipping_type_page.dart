@@ -237,143 +237,138 @@ class _CheckoutShippingTypePageState extends State<CheckoutShippingTypePage> {
       body: SafeAreaWidget(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-          child: LayoutBuilder(
-            builder: (context, constraints) => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Padding(
-                  child: Center(
-                    child: Image.asset(
-                      getImageAsset('shipping_icon.png'),
-                      height: 100,
-                      color: (Theme.of(context).brightness == Brightness.light)
-                          ? null
-                          : Colors.white,
-                      fit: BoxFit.fitHeight,
-                    ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                child: Center(
+                  child: Image.asset(
+                    getImageAsset('shipping_icon.png'),
+                    height: 100,
+                    color: (Theme.of(context).brightness == Brightness.light)
+                        ? null
+                        : Colors.white,
+                    fit: BoxFit.fitHeight,
                   ),
-                  padding: EdgeInsets.only(top: 20),
                 ),
-                SizedBox(
-                  child: Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        (_isLoading
-                            ? Expanded(child: AppLoaderWidget())
-                            : (_isShippingSupported
-                                ? Expanded(
-                                    child: ListView.separated(
-                                      itemCount: _wsShippingOptions.length,
-                                      separatorBuilder: (context, index) =>
-                                          Divider(
-                                        color: Colors.black12,
-                                      ),
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return ListTile(
-                                          contentPadding: EdgeInsets.only(
-                                            left: 16,
-                                            right: 16,
-                                          ),
-                                          title: Text(
-                                            _wsShippingOptions[index]['title'],
-                                            style: Theme.of(context)
+                padding: EdgeInsets.only(top: 20),
+              ),
+              Expanded(child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    (_isLoading
+                        ? Expanded(child: AppLoaderWidget())
+                        : (_isShippingSupported
+                        ? Expanded(
+                      child: ListView.separated(
+                        itemCount: _wsShippingOptions.length,
+                        separatorBuilder: (context, index) =>
+                            Divider(
+                              color: Colors.black12,
+                            ),
+                        itemBuilder:
+                            (BuildContext context, int index) {
+                          return ListTile(
+                            contentPadding: EdgeInsets.only(
+                              left: 16,
+                              right: 16,
+                            ),
+                            title: Text(
+                              _wsShippingOptions[index]['title'],
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            selected: true,
+                            subtitle: NyFutureBuilder<String>(
+                              future: _getShippingPrice(index),
+                              child:
+                                  (BuildContext context, data) {
+                                Map<String, dynamic>
+                                shippingOption =
+                                _wsShippingOptions[index];
+                                return RichText(
+                                  text: TextSpan(
+                                    text: '',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium,
+                                    children: <TextSpan>[
+                                      (shippingOption["object"]
+                                      is FreeShipping
+                                          ? TextSpan(
+                                        text: trans(
+                                            "Free postage"),
+                                      )
+                                          : TextSpan(
+                                        text:
+                                        "${trans("Price")}: ${formatStringCurrency(total: data)}",
+                                      )),
+                                      if (shippingOption[
+                                      "min_amount"] !=
+                                          null)
+                                        TextSpan(
+                                            text:
+                                            "\n${trans("Spend a minimum of")} ${formatStringCurrency(total: shippingOption["min_amount"])}",
+                                            style:
+                                            Theme.of(context)
                                                 .textTheme
-                                                .titleMedium!
+                                                .bodyMedium!
                                                 .copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                          selected: true,
-                                          subtitle: NyFutureBuilder<String>(
-                                            future: _getShippingPrice(index),
-                                            child:
-                                                (BuildContext context, data) {
-                                              Map<String, dynamic>
-                                                  shippingOption =
-                                                  _wsShippingOptions[index];
-                                              return RichText(
-                                                text: TextSpan(
-                                                  text: '',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyMedium,
-                                                  children: <TextSpan>[
-                                                    (shippingOption["object"]
-                                                            is FreeShipping
-                                                        ? TextSpan(
-                                                            text: trans(
-                                                                "Free postage"),
-                                                          )
-                                                        : TextSpan(
-                                                            text:
-                                                                "${trans("Price")}: ${formatStringCurrency(total: data)}",
-                                                          )),
-                                                    if (shippingOption[
-                                                            "min_amount"] !=
-                                                        null)
-                                                      TextSpan(
-                                                          text:
-                                                              "\n${trans("Spend a minimum of")} ${formatStringCurrency(total: shippingOption["min_amount"])}",
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodyMedium!
-                                                                  .copyWith(
-                                                                      fontSize:
-                                                                          14))
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                          trailing: (CheckoutSession.getInstance
-                                                          .shippingType !=
-                                                      null &&
-                                                  CheckoutSession
-                                                          .getInstance
-                                                          .shippingType!
-                                                          .object ==
-                                                      _wsShippingOptions[index]
-                                                          ["object"]
-                                              ? Icon(Icons.check)
-                                              : null),
-                                          onTap: () =>
-                                              _handleCheckoutTapped(index),
-                                        );
-                                      },
-                                    ),
-                                  )
-                                : Text(
-                                    trans(
-                                        "Shipping is not supported for your location, sorry"),
-                                    style:
-                                        Theme.of(context).textTheme.titleLarge,
-                                    textAlign: TextAlign.center,
-                                  ))),
-                        LinkButton(
-                          title: trans("CANCEL"),
-                          action: () => Navigator.pop(context),
-                        ),
-                      ],
+                                                fontSize:
+                                                14))
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+                            trailing: (CheckoutSession.getInstance
+                                .shippingType !=
+                                null &&
+                                CheckoutSession
+                                    .getInstance
+                                    .shippingType!
+                                    .object ==
+                                    _wsShippingOptions[index]
+                                    ["object"]
+                                ? Icon(Icons.check)
+                                : null),
+                            onTap: () =>
+                                _handleCheckoutTapped(index),
+                          );
+                        },
+                      ),
+                    )
+                        : Text(
+                      trans(
+                          "Shipping is not supported for your location, sorry"),
+                      style:
+                      Theme.of(context).textTheme.titleLarge,
+                      textAlign: TextAlign.center,
+                    ))),
+                    LinkButton(
+                      title: trans("CANCEL"),
+                      action: () => Navigator.pop(context),
                     ),
-                    decoration: BoxDecoration(
-                      color: ThemeColor.get(context).backgroundContainer,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow:
-                          (Theme.of(context).brightness == Brightness.light)
-                              ? wsBoxShadow()
-                              : null,
-                    ),
-                    padding: EdgeInsets.all(8),
-                  ),
-                  height: (constraints.maxHeight - constraints.minHeight) * 0.5,
+                  ],
                 ),
-              ],
-            ),
+                decoration: BoxDecoration(
+                  color: ThemeColor.get(context).backgroundContainer,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow:
+                  (Theme.of(context).brightness == Brightness.light)
+                      ? wsBoxShadow()
+                      : null,
+                ),
+                padding: EdgeInsets.all(8),
+              ),),
+            ],
           ),
         ),
       ),

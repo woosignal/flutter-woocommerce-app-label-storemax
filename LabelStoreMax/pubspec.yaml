@@ -1,7 +1,7 @@
 # Official WooSignal App Template for WooCommerce
 
 # Label StoreMax
-# Version: 7.0.2
+# Version: 7.1.0
 # Author: Anthony Gordon
 # Homepage: https://woosignal.com
 # Documentation: https://woosignal.com/docs/app/label-storemax
@@ -29,9 +29,9 @@ dependencies:
   google_fonts: ^6.2.0
   analyzer: ^5.12.0
   intl: ^0.18.0
-  nylo_framework: ^5.24.2
+  nylo_framework: ^5.24.4
   woosignal: ^3.13.4
-  wp_json_api: ^3.5.2
+  wp_json_api: ^3.5.3
   cached_network_image: ^3.3.1
   package_info_plus: ^4.2.0
   money_formatter: ^0.0.5

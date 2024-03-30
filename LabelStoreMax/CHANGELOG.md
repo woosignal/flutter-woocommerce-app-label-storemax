@@ -1,3 +1,10 @@
+## [7.1.0] - 2024-03-31
+
+* Fix PayPal payment issue
+* Update Related Products widget
+* Update Checkout shipping widget
+* Pubspec.yaml dependency updates
+
 ## [7.0.2] - 2024-03-28
 
 * Small refactor to project

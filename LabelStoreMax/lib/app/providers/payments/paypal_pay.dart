@@ -9,6 +9,7 @@
 //  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/app/models/cart.dart';
 import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
 import 'package:woosignal/models/payload/order_wc.dart';
 import 'package:woosignal/models/response/order.dart';
@@ -28,15 +29,21 @@ payPalPay(context, {TaxRate? taxRate}) async {
     WooSignalApp? wooSignalApp = AppHelper.instance.appConfig;
 
     List<CartLineItem> cartLineItems = await cart.getCart();
-    String cartTotal = await cart.getTotal();
+    String taxTotal = await cart.taxAmount(taxRate);
+    String subtotal = await Cart.getInstance.getSubtotal();
+
     String? currencyCode = wooSignalApp?.currencyMeta?.code;
 
-    String shippingTotal =
-        CheckoutSession.getInstance.shippingType?.getTotal() ?? "0";
+    String shippingTotal = CheckoutSession.getInstance.shippingType?.getTotal() ?? "0";
+    String description = "(${cartLineItems.length}) items from ${getEnv('APP_NAME')}".tr(arguments: {"appName": getEnv('APP_NAME')});
 
-    String description =
-        "(${cartLineItems.length}) items from ${getEnv('APP_NAME')}"
-            .tr(arguments: {"appName": getEnv('APP_NAME')});
+    if (taxTotal == "") {
+      taxTotal = "0";
+    }
+
+    if (shippingTotal == "") {
+      shippingTotal = "0";
+    }
 
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -51,9 +58,10 @@ payPalPay(context, {TaxRate? taxRate}) async {
                 "total": total,
                 "currency": currencyCode?.toUpperCase(),
                 "details": {
-                  "subtotal": cartTotal,
+                  "subtotal": subtotal,
                   "shipping": shippingTotal,
-                  "shipping_discount": 0
+                  "shipping_discount": 0,
+                  "tax": taxTotal
                 }
               },
               "description": description,

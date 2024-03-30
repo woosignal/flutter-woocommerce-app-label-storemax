@@ -16,7 +16,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 import 'package:woosignal/models/response/product.dart';
 import 'package:woosignal/models/response/woosignal_app.dart';
 
-class ProductDetailRelatedProductsWidget extends StatelessWidget {
+class ProductDetailRelatedProductsWidget extends StatefulWidget {
   const ProductDetailRelatedProductsWidget(
       {super.key, required this.product, required this.wooSignalApp});
 
@@ -24,10 +24,23 @@ class ProductDetailRelatedProductsWidget extends StatelessWidget {
   final WooSignalApp? wooSignalApp;
 
   @override
+  State<ProductDetailRelatedProductsWidget> createState() => _ProductDetailRelatedProductsWidgetState();
+}
+
+class _ProductDetailRelatedProductsWidgetState extends State<ProductDetailRelatedProductsWidget> {
+
+  bool hasRelatedProducts = true;
+
+  @override
   Widget build(BuildContext context) {
-    if (wooSignalApp!.showRelatedProducts == false) {
+    if (widget.wooSignalApp!.showRelatedProducts == false) {
       return SizedBox.shrink();
     }
+
+    if (hasRelatedProducts == false) {
+      return SizedBox.shrink();
+    }
+
     return ListView(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
@@ -71,7 +84,7 @@ class ProductDetailRelatedProductsWidget extends StatelessWidget {
                           onTap: () {
                             routeTo(ProductDetailPage.path, data: product);
                           },
-                        )))
+                        ),),)
                     .toList(),
               );
             },
@@ -81,11 +94,22 @@ class ProductDetailRelatedProductsWidget extends StatelessWidget {
     );
   }
 
-  Future<List<Product>> fetchRelated() async => await (appWooSignal(
-        (api) => api.getProducts(
-            perPage: 100,
-            include: product?.relatedIds,
-            stockStatus: "instock",
-            status: "publish"),
-      ));
+  Future<List<Product>> fetchRelated() async {
+    List<Product> products =  await appWooSignal(
+          (api) =>
+          api.getProducts(
+              perPage: 25,
+              include: widget.product?.relatedIds,
+              stockStatus: "instock",
+              status: "publish"),
+    );
+
+    if (products.isEmpty) {
+      setState(() {
+        hasRelatedProducts = false;
+      });
+      return [];
+    }
+    return products;
+  }
 }
