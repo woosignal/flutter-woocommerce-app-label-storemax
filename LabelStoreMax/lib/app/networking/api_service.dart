@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/config/decoders.dart';
 import '/app/networking/dio/interceptors/logging_interceptor.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
@@ -9,7 +10,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 |-------------------------------------------------------------------------- */
 
 class ApiService extends NyApiService {
-  ApiService({BuildContext? buildContext}) : super(buildContext);
+  ApiService({BuildContext? buildContext}) : super(buildContext, decoders: modelDecoders);
 
   @override
   String get baseUrl => getEnv('API_BASE_URL');

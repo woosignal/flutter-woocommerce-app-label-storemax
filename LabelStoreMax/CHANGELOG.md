@@ -1,3 +1,8 @@
+## [7.2.0] - 2024-04-03
+
+* Update Base ApiService
+* Pubspec.yaml dependency updates
+
 ## [7.1.0] - 2024-03-31
 
 * Fix PayPal payment issue
