@@ -1,3 +1,8 @@
+## [7.3.0] - 2024-04-06
+
+* Update Android config
+* Pubspec.yaml dependency updates
+
 ## [7.2.0] - 2024-04-03
 
 * Update Base ApiService

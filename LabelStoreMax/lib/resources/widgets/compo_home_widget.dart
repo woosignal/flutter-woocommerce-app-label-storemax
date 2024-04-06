@@ -38,6 +38,7 @@ class CompoHomeWidget extends StatefulWidget {
 }
 
 class _CompoHomeWidgetState extends NyState<CompoHomeWidget> {
+
   @override
   boot() async {
     await _loadHome();

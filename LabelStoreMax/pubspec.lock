@@ -221,10 +221,10 @@ packages:
     dependency: transitive
     description:
       name: device_meta
-      sha256: f9011bce11153dac056b9d945050d796619c4858373b39296929916b048114cc
+      sha256: "0ed759a32c785f2bafad4ad264f0a81b15967a099d2bb4641a8cd885414df302"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.17"
+    version: "1.1.19"
   dio:
     dependency: transitive
     description:
@@ -1230,10 +1230,10 @@ packages:
     dependency: "direct main"
     description:
       name: woosignal
-      sha256: "6390953da29b596eea94fecf26863b1f1bbf3503b5641de92910358432f7a01f"
+      sha256: "04742a2a1de98451352c1247a2b3cc8bcd0d1113ec0741a35ede6391e8eb4eaf"
       url: "https://pub.dev"
     source: hosted
-    version: "3.13.4"
+    version: "3.13.5"
   wp_json_api:
     dependency: "direct main"
     description:
