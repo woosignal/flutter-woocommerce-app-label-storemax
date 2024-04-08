@@ -1,3 +1,7 @@
+## [7.3.1] - 2024-04-09
+
+* Pubspec.yaml dependency updates
+
 ## [7.3.0] - 2024-04-06
 
 * Update Android config
