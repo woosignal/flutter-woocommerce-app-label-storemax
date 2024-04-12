@@ -1,3 +1,8 @@
+## [7.3.2] - 2024-04-12
+
+* Update env file
+* Pubspec.yaml dependency updates
+
 ## [7.3.1] - 2024-04-09
 
 * Pubspec.yaml dependency updates
