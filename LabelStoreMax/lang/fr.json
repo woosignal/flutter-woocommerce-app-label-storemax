@@ -239,5 +239,9 @@
   "Invalid email address": "Adresse e-mail invalide",
   "By completing this order, I agree to all": "En remplissant cette commande, j'accepte toutes",
   "Change language": "Changer de langue",
+  "Order Note": "Remarque sur la commande",
+  "Save Note": "Enregistrer la note",
+  "Enter order note": "Saisir le bon de commande",
+  "Order note must be less than 100 characters": "Le bon de commande doit comporter moins de 100 caractères",
   "Select your language": "choisissez votre langue"
 }

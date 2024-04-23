@@ -239,5 +239,9 @@
   "Invalid email address": "alamat email salah",
   "By completing this order, I agree to all": "Dengan menyelesaikan pesanan ini, saya menyetujui semuanya",
   "Change language": "Ganti BAHASA",
+  "Order Note": "Catatan Pesanan",
+  "Save Note": "Simpan Catatan",
+  "Enter order note": "Masukkan catatan pesanan",
+  "Order note must be less than 100 characters": "Catatan pesanan harus kurang dari 100 karakter",
   "Select your language": "Pilih bahasamu"
 }

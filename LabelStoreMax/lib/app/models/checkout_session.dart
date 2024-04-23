@@ -31,6 +31,7 @@ class CheckoutSession {
   ShippingType? shippingType;
   PaymentType? paymentType;
   Coupon? coupon;
+  String? customerNote;
 
   void initSession() {
     billingDetails = BillingDetails();

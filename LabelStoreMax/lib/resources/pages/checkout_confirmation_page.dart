@@ -11,6 +11,7 @@
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import '/resources/widgets/checkout_customer_note_widget.dart';
 import '/app/models/cart.dart';
 import '/app/models/checkout_session.dart';
 import '/app/models/customer_country.dart';
@@ -231,6 +232,7 @@ class CheckoutConfirmationPageState extends NyState<CheckoutConfirmationPage> {
                       context: context,
                       checkoutSession: checkoutSession,
                     ),
+                  CheckoutCustomerNote(checkoutSession: checkoutSession),
                   Container(
                     decoration: BoxDecoration(
                       boxShadow: wsBoxShadow(),

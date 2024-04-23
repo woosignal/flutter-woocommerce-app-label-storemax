@@ -1,3 +1,9 @@
+## [7.4.0] - 2024-04-23
+
+* Ability to add order notes
+* Add new translations
+* Pubspec.yaml dependency updates
+
 ## [7.3.2] - 2024-04-12
 
 * Update env file

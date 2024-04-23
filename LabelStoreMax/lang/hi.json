@@ -239,5 +239,9 @@
   "Invalid email address": "amaany eemel pata",
   "By completing this order, I agree to all": "is aadesh ko poora karake, main sabhee ke lie sahamat hoon",
   "Change language": "bhaasha badalen",
+  "Order Note": "aadesh not",
+  "Save Note": "not sahejen",
+  "Enter order note": "ordar not darj karen",
+  "Order note must be less than 100 characters": "ordar not 100 aksharon se kam hona chaahie",
   "Select your language": "apanee bhaasha ka chayan karen"
 }

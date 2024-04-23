@@ -239,5 +239,9 @@
   "Invalid email address": "Invalid email address",
   "By completing this order, I agree to all": "By completing this order, I agree to all",
   "Change language": "Change language",
+  "Order Note": "Order Note",
+  "Save Note": "Save Note",
+  "Enter order note": "Enter order note",
+  "Order note must be less than 100 characters": "Order note must be less than 100 characters",
   "Select your language": "Select your language"
 }

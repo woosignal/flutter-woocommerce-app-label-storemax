@@ -12,7 +12,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 | Docs here: https://woosignal.com/docs/app/label-storemax
 |-------------------------------------------------------------------------- */
 
-const appPaymentGateways = [];
+const appPaymentGateways = ["CashOnDelivery"];
 // Available: "Stripe", "CashOnDelivery", "PayPal", "RazorPay"
 // e.g. appPaymentGateways = ["Stripe", "CashOnDelivery"]; will only use Stripe and Cash on Delivery.
 

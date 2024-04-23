@@ -239,5 +239,9 @@
   "Invalid email address": "Endereço de email invalido",
   "By completing this order, I agree to all": "Ao concluir este pedido, concordo com todos",
   "Change language": "Mudar idioma",
+  "Order Note": "Nota de pedido",
+  "Save Note": "Salvar nota",
+  "Enter order note": "Insira a nota do pedido",
+  "Order note must be less than 100 characters": "A nota do pedido deve ter menos de 100 caracteres",
   "Select your language": "selecione sua lingua"
 }

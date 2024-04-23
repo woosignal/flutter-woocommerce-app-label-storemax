@@ -239,5 +239,9 @@
   "Invalid email address": "Ungültige E-Mail-Adresse",
   "By completing this order, I agree to all": "Mit Abschluss dieser Bestellung stimme ich allem zu",
   "Change language": "Sprache ändern",
+  "Order Note": "Bestellhinweis",
+  "Save Note": "Notiz speichern",
+  "Enter order note": "Bestellnotiz eingeben",
+  "Order note must be less than 100 characters": "Die Bestellnotiz muss weniger als 100 Zeichen lang sein",
   "Select your language": "Wähle deine Sprache"
 }

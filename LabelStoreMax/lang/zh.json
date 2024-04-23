@@ -239,5 +239,9 @@
   "Invalid email address": "无效的邮件地址",
   "By completing this order, I agree to all": "通过完成此订单，我同意所有",
   "Change language": "改变语言",
+  "Order Note": "订单备注",
+  "Save Note": "保存备注",
+  "Enter order note": "输入订单备注",
+  "Order note must be less than 100 characters": "订单备注必须少于 100 个字符",
   "Select your language": "选择你的语言"
 }

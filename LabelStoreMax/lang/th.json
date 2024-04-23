@@ -239,5 +239,9 @@
   "Invalid email address": "ที่อยู่อีเมลที่ไม่ถูกต้อง",
   "By completing this order, I agree to all": "เมื่อดำเนินการตามคำสั่งซื้อนี้เสร็จสิ้น ฉันยอมรับทุกประการ",
   "Change language": "เปลี่ยนภาษา",
+  "Order Note": "หมายเหตุการสั่งซื้อ",
+  "Save Note": "บันทึกหมายเหตุ",
+  "Enter order note": "ป้อนบันทึกการสั่งซื้อ",
+  "Order note must be less than 100 characters": "หมายเหตุการสั่งซื้อต้องมีอักขระน้อยกว่า 100 ตัว",
   "Select your language": "เลือกภาษาของคุณ"
 }
