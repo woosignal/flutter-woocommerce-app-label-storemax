@@ -1,3 +1,7 @@
+## [7.4.1] - 2024-04-27
+
+* Pubspec.yaml dependency updates
+
 ## [7.4.0] - 2024-04-23
 
 * Ability to add order notes
