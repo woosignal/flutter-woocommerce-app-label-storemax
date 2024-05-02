@@ -1,3 +1,8 @@
+## [7.4.2] - 2024-05-02
+
+* ErrorStack added to the project
+* Pubspec.yaml dependency updates
+
 ## [7.4.1] - 2024-04-27
 
 * Pubspec.yaml dependency updates

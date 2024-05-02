@@ -221,10 +221,10 @@ packages:
     dependency: transitive
     description:
       name: device_meta
-      sha256: c6749095677b372ca150f121ea1508404a6c30770e1a36a0c929ee6ff23a702d
+      sha256: a3a0aa55de57c7ebb2281b1117a1e0baa4c7bdbc31b8db49927e9b5f8df76dd7
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.22"
+    version: "1.1.23"
   dio:
     dependency: transitive
     description:
@@ -249,6 +249,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.5"
+  error_stack:
+    dependency: transitive
+    description:
+      name: error_stack
+      sha256: ad4e54bb6b7677d1e1dac4eb7350c0333e748470aa7b161c9a98678c359fb82c
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   eventify:
     dependency: transitive
     description:
@@ -697,18 +705,18 @@ packages:
     dependency: "direct main"
     description:
       name: nylo_framework
-      sha256: "2ddca05a647a5d02f82580fe824a9ed3c6bf4b61e7ec02f2fbf7fca812e76fde"
+      sha256: "7b805036d0bf6b638f3f05854e7733b7971db0e06d5094129886500f0d1f6d29"
       url: "https://pub.dev"
     source: hosted
-    version: "5.26.0"
+    version: "5.27.0"
   nylo_support:
     dependency: transitive
     description:
       name: nylo_support
-      sha256: "088cfcb38b2415b1fb1a437d8fb440d2d265291c1500c5810d6ded2727a05a72"
+      sha256: da574461f42f6797d8b6a82088377a336b9e531ffe1fa21a254d597f4ab1e011
       url: "https://pub.dev"
     source: hosted
-    version: "5.66.0"
+    version: "5.68.0"
   octo_image:
     dependency: transitive
     description:
@@ -953,10 +961,10 @@ packages:
     dependency: transitive
     description:
       name: skeletonizer
-      sha256: "9a3ae2f4ee4349bdbed3292d04586a1315a44745d2c454684f82f0c46dbeabf9"
+      sha256: "50c3fdf3d1bf6182129c03b53bc7ff6dca10ca0b8e71ccdee148b9322caabdba"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.2+1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -1230,18 +1238,18 @@ packages:
     dependency: "direct main"
     description:
       name: woosignal
-      sha256: "60fc869e035507799219be7745a4807caeb69de597460584383a24295ba11b18"
+      sha256: "49cd3d5d9b34cb155de626c5580cc5b7a2cf794c30b768d49cbeb62c7e6bbdaa"
       url: "https://pub.dev"
     source: hosted
-    version: "3.14.3"
+    version: "3.14.4"
   wp_json_api:
     dependency: "direct main"
     description:
       name: wp_json_api
-      sha256: "0b070a1e12578e6149908e62807419d44a54dd1ad49681d9e59c8186cfbb5117"
+      sha256: c26d96efde165be31d04b89fa9c3f98ca84b8e3f1008f2cbe97809ee13715a11
       url: "https://pub.dev"
     source: hosted
-    version: "3.5.6"
+    version: "3.5.7"
   xdg_directories:
     dependency: transitive
     description:
@@ -1267,5 +1275,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.3.2 <4.0.0"
+  dart: ">=3.3.3 <4.0.0"
   flutter: ">=3.16.6"
