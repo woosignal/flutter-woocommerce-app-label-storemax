@@ -1,3 +1,7 @@
+## [7.5.2] - 2024-05-14
+
+* Pubspec.yaml dependency updates
+
 ## [7.5.1] - 2024-05-11
 
 * Pubspec.yaml dependency updates

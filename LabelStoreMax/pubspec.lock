@@ -221,10 +221,10 @@ packages:
     dependency: transitive
     description:
       name: device_meta
-      sha256: "4c26f1dd32533b964fc9059e681826f864295286457af385801a83fe56275f26"
+      sha256: c4a43e6776e2eebc16bb8125a1ec9697b8dd62f8a04870cfe639f87916139f4f
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.24"
+    version: "1.1.25"
   dio:
     dependency: transitive
     description:
@@ -253,10 +253,10 @@ packages:
     dependency: transitive
     description:
       name: error_stack
-      sha256: a8fc8c21a0e471333d3787ef669f8e072ce7f29122b1b1448dded9dfdd51046f
+      sha256: "1a7391d7c33c59867c0082569339462615461afeda76b0614c59a6dcb5acf63b"
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.1"
+    version: "1.3.1"
   eventify:
     dependency: transitive
     description:
@@ -412,7 +412,7 @@ packages:
     source: hosted
     version: "4.0.1"
   flutter_secure_storage:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: flutter_secure_storage
       sha256: ffdbb60130e4665d2af814a0267c481bcf522c41ae2e43caf69fa0146876d685
@@ -521,10 +521,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_widget_from_html_core
-      sha256: "028f4989b9ff4907466af233d50146d807772600d98a3e895662fbdb09c39225"
+      sha256: cc1d9be3d187ce668ee02091cd5442dfb050cdaf98e0ab9a4d12ad008f966979
       url: "https://pub.dev"
     source: hosted
-    version: "0.14.11"
+    version: "0.14.12"
   fluttertoast:
     dependency: transitive
     description:
@@ -705,18 +705,18 @@ packages:
     dependency: "direct main"
     description:
       name: nylo_framework
-      sha256: "1ef64622241300f7a0b8decf3c68593e0d86b04e451cc1015beb334155fa1e50"
+      sha256: "2d57650c2528312ec8d821b0d89912d26f40cfddd8acebe8e8b3c4e2aac133ea"
       url: "https://pub.dev"
     source: hosted
-    version: "5.27.1"
+    version: "5.27.3"
   nylo_support:
     dependency: transitive
     description:
       name: nylo_support
-      sha256: "62fdd215433e17b0fb35b2214ec3aef727697bed95e488167cab36be1072979a"
+      sha256: ab630da97299dd362536976f02896bd7cdedc453cb3839d9240e3fc3b0af8c18
       url: "https://pub.dev"
     source: hosted
-    version: "5.68.1"
+    version: "5.69.2"
   octo_image:
     dependency: transitive
     description:
@@ -1238,10 +1238,10 @@ packages:
     dependency: "direct main"
     description:
       name: woosignal
-      sha256: "98e930e3ff8dbf25f585d47cce613ffcb79b36f364a8ae5293d9ef276d631da7"
+      sha256: "9ff3745ab92b506ccaa916da8e9b36573cf904fed673ddd9a029bc347de63d02"
       url: "https://pub.dev"
     source: hosted
-    version: "3.14.5"
+    version: "3.14.6"
   wp_json_api:
     dependency: "direct main"
     description:
