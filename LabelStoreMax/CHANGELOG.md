@@ -1,3 +1,8 @@
+## [7.5.4] - 2024-06-15
+
+* Pubspec.yaml dependency updates
+* Remove pubspec.lock
+
 ## [7.5.3] - 2024-05-24
 
 * Pubspec.yaml dependency updates
