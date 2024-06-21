@@ -1,3 +1,8 @@
+## [7.5.5] - 2024-06-21
+
+* Update default payment gateways
+* Pubspec.yaml dependency updates
+ 
 ## [7.5.4] - 2024-06-15
 
 * Pubspec.yaml dependency updates
