@@ -1,3 +1,8 @@
+## [7.5.7] - 2024-07-31
+
+* Update order_wc.dart class
+* Pubspec.yaml dependency updates
+
 ## [7.5.6] - 2024-07-18
 
 * Pubspec.yaml dependency updates 

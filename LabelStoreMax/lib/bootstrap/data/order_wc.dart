@@ -84,16 +84,16 @@ Future<OrderWC> buildOrderWC({TaxRate? taxRate, bool markPaid = true}) async {
 
   Shipping shipping = Shipping();
 
-  shipping.firstName = billingDetails.shippingAddress!.firstName;
-  shipping.lastName = billingDetails.shippingAddress!.lastName;
-  shipping.address1 = billingDetails.shippingAddress!.addressLine;
-  shipping.city = billingDetails.shippingAddress!.city;
-  shipping.postcode = billingDetails.shippingAddress!.postalCode;
-  if (billingDetails.shippingAddress!.customerCountry!.hasState()) {
-    billing.state =
-        billingDetails.shippingAddress!.customerCountry!.state!.name;
+  shipping.firstName = billingDetails.shippingAddress?.firstName;
+  shipping.lastName = billingDetails.shippingAddress?.lastName;
+  shipping.address1 = billingDetails.shippingAddress?.addressLine;
+  shipping.city = billingDetails.shippingAddress?.city;
+  shipping.postcode = billingDetails.shippingAddress?.postalCode;
+  if (billingDetails.shippingAddress?.customerCountry?.hasState() ?? false) {
+    shipping.state =
+        billingDetails.shippingAddress?.customerCountry?.state?.name;
   }
-  billing.country = billingDetails.shippingAddress!.customerCountry!.name;
+  shipping.country = billingDetails.shippingAddress?.customerCountry?.name;
 
   orderWC.shipping = shipping;
 
