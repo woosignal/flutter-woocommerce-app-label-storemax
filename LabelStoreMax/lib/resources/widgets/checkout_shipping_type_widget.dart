@@ -32,7 +32,7 @@ class CheckoutShippingTypeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool hasDisableShipping = wooSignalApp!.disableShipping == 1;
+    bool hasDisableShipping = wooSignalApp?.disableShipping == 1;
     if (hasDisableShipping == true) {
       return SizedBox.shrink();
     }
@@ -51,7 +51,7 @@ class CheckoutShippingTypeWidget extends StatelessWidget {
 
   _actionSelectShipping() {
     CustomerAddress? shippingAddress =
-        checkoutSession.billingDetails!.shippingAddress;
+        checkoutSession.billingDetails?.shippingAddress;
     if (shippingAddress == null || shippingAddress.customerCountry == null) {
       showToastNotification(
         context,

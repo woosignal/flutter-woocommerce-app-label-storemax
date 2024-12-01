@@ -9,8 +9,8 @@
 //  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/app/models/cart.dart';
-import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
+import '/bootstrap/paypal/paypal_checkout_view.dart';
+import '/app/models/cart.dart';
 import 'package:woosignal/models/payload/order_wc.dart';
 import 'package:woosignal/models/response/order.dart';
 import 'package:woosignal/models/response/tax_rate.dart';
@@ -34,8 +34,11 @@ payPalPay(context, {TaxRate? taxRate}) async {
 
     String? currencyCode = wooSignalApp?.currencyMeta?.code;
 
-    String shippingTotal = CheckoutSession.getInstance.shippingType?.getTotal() ?? "0";
-    String description = "(${cartLineItems.length}) items from ${getEnv('APP_NAME')}".tr(arguments: {"appName": getEnv('APP_NAME')});
+    String shippingTotal =
+        CheckoutSession.getInstance.shippingType?.getTotal() ?? "0";
+    String description =
+        "(${cartLineItems.length}) items from ${getEnv('APP_NAME')}"
+            .tr(arguments: {"appName": getEnv('APP_NAME')});
 
     if (taxTotal == "") {
       taxTotal = "0";
@@ -96,14 +99,14 @@ payPalPay(context, {TaxRate? taxRate}) async {
                 await (appWooSignal((api) => api.createOrder(orderWC)));
 
             if (order == null) {
-              showToastNotification(
-                context,
-                title: trans("Error"),
-                description:
-                    trans("Something went wrong, please contact our store"),
-              );
-              updateState(CheckoutConfirmationPage.path,
-                  data: {"reloadState": false});
+              updateState(CheckoutConfirmationPage.path.nyPageName(), data: {
+                "reloadState": false,
+                "toast": {
+                  "title": trans("Error"),
+                  "description":
+                      trans("Something went wrong, please contact our store")
+                }
+              });
               return;
             }
 
@@ -117,7 +120,7 @@ payPalPay(context, {TaxRate? taxRate}) async {
               description:
                   trans("Something went wrong, please contact our store"),
             );
-            updateState(CheckoutConfirmationPage.path,
+            updateState(CheckoutConfirmationPage.path.nyPageName(),
                 data: {"reloadState": false});
           },
           onCancel: () {
@@ -126,7 +129,7 @@ payPalPay(context, {TaxRate? taxRate}) async {
               title: trans("Payment Cancelled"),
               description: trans("The payment has been cancelled"),
             );
-            updateState(CheckoutConfirmationPage.path,
+            updateState(CheckoutConfirmationPage.path.nyPageName(),
                 data: {"reloadState": false});
           },
         ),

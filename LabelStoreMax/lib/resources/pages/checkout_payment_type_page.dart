@@ -17,43 +17,40 @@ import '/resources/widgets/safearea_widget.dart';
 import '/resources/widgets/woosignal_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
-class CheckoutPaymentTypePage extends StatefulWidget {
-  static String path = "/checkout-payment-type";
-  CheckoutPaymentTypePage();
+class CheckoutPaymentTypePage extends NyStatefulWidget {
+  static RouteView path =
+      ("/checkout-payment-type", (_) => CheckoutPaymentTypePage());
 
-  @override
-  createState() => _CheckoutPaymentTypePageState();
+  CheckoutPaymentTypePage({super.key})
+      : super(child: () => _CheckoutPaymentTypePageState());
 }
 
-class _CheckoutPaymentTypePageState extends NyState<CheckoutPaymentTypePage> {
-  _CheckoutPaymentTypePageState();
-
+class _CheckoutPaymentTypePageState extends NyPage<CheckoutPaymentTypePage> {
   List<PaymentType?> _paymentTypes = [];
 
   @override
-  init() async {
-    super.init();
+  get init => () async {
+        super.init();
 
-    _paymentTypes = await getPaymentTypes();
+        _paymentTypes = await getPaymentTypes();
 
-    if (_paymentTypes.isEmpty &&
-        getEnv('APP_DEBUG', defaultValue: false) == true) {
-      NyLogger.info(
-          'You have no payment methods set. Visit the WooSignal dashboard (https://woosignal.com/dashboard) to set a payment method.');
-    }
+        if (_paymentTypes.isEmpty &&
+            getEnv('APP_DEBUG', defaultValue: false) == true) {
+          NyLogger.info(
+              'You have no payment methods set. Visit the WooSignal dashboard (https://woosignal.com/dashboard) to set a payment method.');
+        }
 
-    // print(CheckoutSession.getInstance.paymentType?.name);
-    if (CheckoutSession.getInstance.paymentType == null) {
-      if (_paymentTypes.isNotEmpty) {
-        CheckoutSession.getInstance.paymentType = _paymentTypes.firstWhere(
-            (paymentType) => paymentType?.id == 20,
-            orElse: () => _paymentTypes.first);
-      }
-    }
-  }
+        if (CheckoutSession.getInstance.paymentType == null) {
+          if (_paymentTypes.isNotEmpty) {
+            CheckoutSession.getInstance.paymentType = _paymentTypes.firstWhere(
+                (paymentType) => paymentType?.id == 20,
+                orElse: () => _paymentTypes.first);
+          }
+        }
+      };
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -70,14 +67,24 @@ class _CheckoutPaymentTypePageState extends NyState<CheckoutPaymentTypePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Padding(
+                  padding: EdgeInsets.only(top: 20),
                   child: Center(
                     child: Image.asset(getImageAsset("credit_cards.png"),
                         fit: BoxFit.fitHeight, height: 100),
                   ),
-                  padding: EdgeInsets.only(top: 20),
                 ),
                 SizedBox(
+                  height: (constraints.maxHeight - constraints.minHeight) * 0.5,
                   child: Container(
+                    decoration: BoxDecoration(
+                      color: ThemeColor.get(context).backgroundContainer,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow:
+                          (Theme.of(context).brightness == Brightness.light)
+                              ? wsBoxShadow()
+                              : null,
+                    ),
+                    padding: EdgeInsets.all(8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -145,17 +152,7 @@ class _CheckoutPaymentTypePageState extends NyState<CheckoutPaymentTypePage> {
                         ),
                       ],
                     ),
-                    decoration: BoxDecoration(
-                      color: ThemeColor.get(context).backgroundContainer,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow:
-                          (Theme.of(context).brightness == Brightness.light)
-                              ? wsBoxShadow()
-                              : null,
-                    ),
-                    padding: EdgeInsets.all(8),
                   ),
-                  height: (constraints.maxHeight - constraints.minHeight) * 0.5,
                 ),
               ],
             ),

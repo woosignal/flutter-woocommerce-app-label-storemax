@@ -21,44 +21,42 @@ class ProductReviewItemContainerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          RatingBarIndicator(
-            rating: productReview.rating!.toDouble(),
-            itemBuilder: (context, index) => Icon(
-              Icons.star,
-              color: Colors.amber,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        RatingBarIndicator(
+          rating: productReview.rating!.toDouble(),
+          itemBuilder: (context, index) => Icon(
+            Icons.star,
+            color: Colors.amber,
+          ),
+          itemCount: 5,
+          itemSize: 20.0,
+          direction: Axis.horizontal,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Text(parseHtmlString(productReview.review)),
+        ),
+        Row(
+          children: [
+            Text(productReview.reviewer!),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8),
+              child: Icon(
+                Icons.circle_rounded,
+                size: 3,
+              ),
             ),
-            itemCount: 5,
-            itemSize: 20.0,
-            direction: Axis.horizontal,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8),
-            child: Text(parseHtmlString(productReview.review)),
-          ),
-          Row(
-            children: [
-              Text(productReview.reviewer!),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Icon(
-                  Icons.circle_rounded,
-                  size: 3,
-                ),
+            Text(
+              formatDateTime("MMM d, yyyy").format(
+                parseDateTime(productReview.dateCreated!),
               ),
-              Text(
-                formatDateTime("MMM d, yyyy").format(
-                  parseDateTime(productReview.dateCreated!),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
+            ),
+          ],
+        )
+      ],
     );
   }
 }

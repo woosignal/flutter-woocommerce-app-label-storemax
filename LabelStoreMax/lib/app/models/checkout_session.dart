@@ -54,7 +54,7 @@ class CheckoutSession {
     }
 
     String billingAddress = jsonEncode(customerAddress.toJson());
-    await NyStorage.store(SharedKey.customerBillingDetails, billingAddress);
+    await NyStorage.save(SharedKey.customerBillingDetails, billingAddress);
   }
 
   Future<CustomerAddress?> getBillingAddress() async {
@@ -77,7 +77,7 @@ class CheckoutSession {
       return;
     }
     String shippingAddress = jsonEncode(customerAddress.toJson());
-    await NyStorage.store(SharedKey.customerShippingDetails, shippingAddress);
+    await NyStorage.save(SharedKey.customerShippingDetails, shippingAddress);
   }
 
   Future<CustomerAddress?> getShippingAddress() async {

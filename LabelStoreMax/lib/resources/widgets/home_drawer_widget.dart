@@ -9,7 +9,7 @@
 //  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/resources/widgets/store_logo_widget.dart';
+import '/resources/widgets/store_logo_widget.dart';
 import '/resources/pages/account_detail_page.dart';
 import '/resources/pages/account_login_page.dart';
 import '/resources/pages/cart_page.dart';
@@ -61,10 +61,10 @@ class _HomeDrawerWidgetState extends State<HomeDrawerWidget> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Center(child: StoreLogo()),
               decoration: BoxDecoration(
                 color: ThemeColor.get(context).background,
               ),
+              child: Center(child: StoreLogo()),
             ),
             if (["compo"].contains(_themeType) == false)
               Column(
@@ -72,13 +72,13 @@ class _HomeDrawerWidgetState extends State<HomeDrawerWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
+                    padding: EdgeInsets.only(left: 16, top: 8, bottom: 8),
                     child: Text(
                       trans("Menu"),
                       style: Theme.of(context).textTheme.titleSmall!.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
                     ),
-                    padding: EdgeInsets.only(left: 16, top: 8, bottom: 8),
                   ),
                   if (widget.wooSignalApp!.wpLoginEnabled == 1)
                     ListTile(
@@ -124,6 +124,7 @@ class _HomeDrawerWidgetState extends State<HomeDrawerWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
+                      padding: EdgeInsets.only(left: 16, top: 8, bottom: 8),
                       child: Text(
                         trans("Categories".tr()),
                         style: Theme.of(context).textTheme.titleSmall!.copyWith(
@@ -131,7 +132,6 @@ class _HomeDrawerWidgetState extends State<HomeDrawerWidget> {
                             ),
                         textAlign: TextAlign.left,
                       ),
-                      padding: EdgeInsets.only(left: 16, top: 8, bottom: 8),
                     ),
                     ...widget.productCategories.map((collection) {
                       return ListTile(
@@ -152,11 +152,11 @@ class _HomeDrawerWidgetState extends State<HomeDrawerWidget> {
             if (widget.wooSignalApp!.appTermsLink != null &&
                 widget.wooSignalApp!.appPrivacyLink != null)
               Padding(
+                padding: EdgeInsets.only(left: 16, top: 8, bottom: 8),
                 child: Text(
                   trans("About Us"),
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
-                padding: EdgeInsets.only(left: 16, top: 8, bottom: 8),
               ),
             if (widget.wooSignalApp!.appTermsLink != null &&
                 widget.wooSignalApp!.appTermsLink!.isNotEmpty)
@@ -204,11 +204,11 @@ class _HomeDrawerWidgetState extends State<HomeDrawerWidget> {
             ),
             if (_menuLinks.isNotEmpty)
               Padding(
+                padding: EdgeInsets.only(left: 16, top: 8, bottom: 8),
                 child: Text(
                   trans("Social"),
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
-                padding: EdgeInsets.only(left: 16, top: 8, bottom: 8),
               ),
             ..._menuLinks
                 .where((element) => element.label != "")
@@ -252,7 +252,7 @@ class _HomeDrawerWidgetState extends State<HomeDrawerWidget> {
     Navigator.pop(context);
     if (widget.wooSignalApp!.wpLoginEnabled == 1 &&
         !(await WPJsonAPI.wpUserLoggedIn())) {
-      UserAuth.instance.redirect = AccountDetailPage.path;
+      UserAuth.instance.redirect = AccountDetailPage.path.name;
       routeTo(AccountLoginPage.path);
       return;
     }

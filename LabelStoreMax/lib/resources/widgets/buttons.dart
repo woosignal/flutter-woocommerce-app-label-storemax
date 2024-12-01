@@ -30,7 +30,7 @@ class PrimaryButton extends StatelessWidget {
         textStyle: Theme.of(context).textTheme.labelLarge!.copyWith(
             fontSize: 16,
             fontWeight: FontWeight.bold,
-            color: ThemeColor.get(context).buttonPrimaryContent),
+            color: ThemeColor.get(context).buttonContent),
         bgColor: ThemeColor.get(context).buttonBackground,
       );
 }
@@ -69,6 +69,7 @@ class LinkButton extends StatelessWidget {
     final double screenWidth = MediaQuery.of(context).size.width;
     return InkWell(
       key: key,
+      onTap: action == null ? null : () async => await action!(),
       child: Container(
         height: (screenWidth >= 385 ? 55 : 49),
         width: double.infinity,
@@ -86,7 +87,6 @@ class LinkButton extends StatelessWidget {
               : Theme.of(context).textTheme.bodyLarge,
         )),
       ),
-      onTap: action == null ? null : () async => await action!(),
     );
   }
 }
@@ -126,6 +126,11 @@ class WooSignalButton extends StatelessWidget {
           elevation: 0,
           shadowColor: Colors.transparent,
         ),
+        onPressed: (action == null || isLoading == true)
+            ? null
+            : () async {
+                await action!();
+              },
         child: isLoading
             ? AppLoaderWidget()
             : AutoSizeText(
@@ -135,11 +140,6 @@ class WooSignalButton extends StatelessWidget {
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
               ),
-        onPressed: (action == null || isLoading == true)
-            ? null
-            : () async {
-                await action!();
-              },
       ),
     );
   }

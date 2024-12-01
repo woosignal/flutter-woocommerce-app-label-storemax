@@ -43,13 +43,14 @@ class ProductDetailBodyWidget extends StatelessWidget {
         ProductDetailDescriptionWidget(product: product),
         // </Description body>
 
-        ProductDetailReviewsWidget(
-            product: product, wooSignalApp: wooSignalApp),
+        Skeleton.ignore(
+            child: ProductDetailReviewsWidget(
+                product: product, wooSignalApp: wooSignalApp)),
         // </Product reviews>
 
         if (product != null)
           ProductDetailUpsellWidget(
-              productIds: product!.upsellIds, wooSignalApp: wooSignalApp),
+              productIds: product?.upsellIds, wooSignalApp: wooSignalApp),
         // </You may also like>
 
         ProductDetailRelatedProductsWidget(
@@ -62,7 +63,7 @@ class ProductDetailBodyWidget extends StatelessWidget {
   _viewProductImages(BuildContext context, int i) {
     routeTo(ProductImageViewerPage.path, data: {
       "index": i,
-      "images": product!.images.map((f) => f.src).toList()
+      "images": product?.images.map((f) => f.src).toList()
     });
   }
 }

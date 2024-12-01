@@ -33,12 +33,11 @@ import 'package:woosignal/models/response/tax_rate.dart';
 //     id: 6,
 //     name: "My Payment",
 //     description: trans("Debit or Credit Card"),
-//     assetImage: "payment_logo.png",  E.g. /public/assets/images/payment_logo.png
+//     assetImage: "payment_logo.png",  E.g. /public/images/payment_logo.png
 //     pay: examplePay,
 //   ),
 
-examplePay(context,
-    {required CheckoutConfirmationPageState state, TaxRate? taxRate}) async {
+examplePay(context, {TaxRate? taxRate}) async {
   // HANDLE YOUR PAYMENT INTEGRATION HERE
   // ...
   // ...
@@ -58,7 +57,8 @@ examplePay(context,
       title: trans("Error"),
       description: trans("Something went wrong, please contact our store"),
     );
-    state.reloadState(showLoader: false);
+    updateState(CheckoutConfirmationPage.path.nyPageName(),
+        data: {"reloadState": false});
     return;
   }
   routeTo(CheckoutStatusPage.path, data: order);

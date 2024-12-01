@@ -23,7 +23,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 import 'package:woosignal/models/response/woosignal_app.dart';
 
 class NoticThemeWidget extends StatefulWidget {
-  NoticThemeWidget({super.key, required this.wooSignalApp});
+  const NoticThemeWidget({super.key, required this.wooSignalApp});
   final WooSignalApp? wooSignalApp;
 
   @override
@@ -37,13 +37,13 @@ class _NoticThemeWidgetState extends NyState<NoticThemeWidget> {
   List<BottomNavItem>? allNavWidgets;
 
   @override
-  init() async {
-    activeWidget = NoticHomeWidget(wooSignalApp: widget.wooSignalApp);
-    allNavWidgets = await bottomNavWidgets();
-  }
+  get init => () async {
+        activeWidget = NoticHomeWidget(wooSignalApp: widget.wooSignalApp);
+        allNavWidgets = await bottomNavWidgets();
+      };
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return Scaffold(
       body: activeWidget,
       resizeToAvoidBottomInset: false,

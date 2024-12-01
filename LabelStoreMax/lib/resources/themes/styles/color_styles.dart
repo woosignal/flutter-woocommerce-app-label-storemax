@@ -9,7 +9,7 @@ abstract class ColorStyles extends BaseColorStyles {
   Color get background;
   Color get backgroundContainer;
   @override
-  Color get primaryContent;
+  Color get content;
   @override
   Color get primaryAccent;
 
@@ -28,7 +28,7 @@ abstract class ColorStyles extends BaseColorStyles {
   @override
   Color get buttonBackground;
   @override
-  Color get buttonPrimaryContent;
+  Color get buttonContent;
 
   // bottom tab bar
   @override

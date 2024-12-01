@@ -55,7 +55,7 @@ List<PaymentType> paymentTypeList = [
   //   id: 6,
   //   name: "MyNewPaymentMethod",
   //   description: "Debit or Credit Card",
-  //   assetImage: "add icon image to public/assets/images/myimage.png",
+  //   assetImage: "add icon image to public/images/myimage.png",
   //   pay: "myCustomPaymentFunction",
   // ),
 ];

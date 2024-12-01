@@ -22,10 +22,9 @@ import 'package:wp_json_api/models/responses/wc_customer_info_response.dart'
 import 'package:wp_json_api/wp_json_api.dart';
 
 class LeaveReviewPage extends NyStatefulWidget {
-  static String path = "/product-leave-review";
+  static RouteView path = ("/product-leave-review", (_) => LeaveReviewPage());
 
-  LeaveReviewPage({Key? key})
-      : super(path, key: key, child: _LeaveReviewPageState());
+  LeaveReviewPage({super.key}) : super(child: () => _LeaveReviewPageState());
 }
 
 class _LeaveReviewPageState extends NyState<LeaveReviewPage> {
@@ -37,15 +36,15 @@ class _LeaveReviewPageState extends NyState<LeaveReviewPage> {
   bool _isLoading = false;
 
   @override
-  init() async {
-    _lineItem = widget.controller.data()['line_item'] as LineItems?;
-    _order = widget.controller.data()['order'] as Order?;
-    _textEditingController = TextEditingController();
-    _rating = 5;
-  }
+  get init => () {
+        _lineItem = widget.controller.data()['line_item'] as LineItems?;
+        _order = widget.controller.data()['order'] as Order?;
+        _textEditingController = TextEditingController();
+        _rating = 5;
+      };
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(trans("Leave a review")),
@@ -67,16 +66,14 @@ class _LeaveReviewPageState extends NyState<LeaveReviewPage> {
                     ),
                     Text(_lineItem!.name!),
                     Flexible(
-                      child: Container(
-                        child: TextField(
-                          controller: _textEditingController,
-                          style: Theme.of(context).textTheme.titleMedium,
-                          keyboardType: TextInputType.text,
-                          autocorrect: false,
-                          autofocus: true,
-                          obscureText: false,
-                          textCapitalization: TextCapitalization.sentences,
-                        ),
+                      child: TextField(
+                        controller: _textEditingController,
+                        style: Theme.of(context).textTheme.titleMedium,
+                        keyboardType: TextInputType.text,
+                        autocorrect: false,
+                        autofocus: true,
+                        obscureText: false,
+                        textCapitalization: TextCapitalization.sentences,
                       ),
                     ),
                     Padding(
@@ -114,12 +111,11 @@ class _LeaveReviewPageState extends NyState<LeaveReviewPage> {
     String review = _textEditingController!.text;
     wc_customer_info.Data? wcCustomerInfo = await _fetchWpUserData();
     if (wcCustomerInfo == null) {
-      showToastNotification(
-        context,
-        title: trans("Oops!"),
-        description: trans("Something went wrong"),
-        style: ToastNotificationStyleType.DANGER,
-      );
+      showToast(
+          title: trans("Oops!"),
+          description: trans("Something went wrong"),
+          icon: Icons.info_outline,
+          style: ToastNotificationStyleType.danger);
       setState(() {
         _isLoading = false;
       });
@@ -145,16 +141,16 @@ class _LeaveReviewPageState extends NyState<LeaveReviewPage> {
                   )));
 
           if (productReview == null) {
-            showToastNotification(context,
+            showToastOops(
                 title: trans("Oops"),
-                description: trans("Something went wrong"),
-                style: ToastNotificationStyleType.INFO);
+                description: trans("Something went wrong"));
             return;
           }
-          showToastNotification(context,
+          showToast(
               title: trans("Success"),
               description: trans("Your review has been submitted"),
-              style: ToastNotificationStyleType.SUCCESS);
+              icon: Icons.check,
+              style: ToastNotificationStyleType.success);
           pop(result: _lineItem);
         });
 

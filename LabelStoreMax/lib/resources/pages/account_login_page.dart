@@ -9,7 +9,9 @@
 //  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/resources/widgets/store_logo_widget.dart';
+import '/app/forms/login_form.dart';
+import '/resources/widgets/buttons/buttons.dart';
+import '/resources/widgets/store_logo_widget.dart';
 import '/app/events/login_event.dart';
 import '/resources/pages/account_register_page.dart';
 import '/bootstrap/app_helper.dart';
@@ -24,33 +26,30 @@ import 'package:wp_json_api/exceptions/invalid_username_exception.dart';
 import 'package:wp_json_api/models/responses/wp_user_login_response.dart';
 import 'package:wp_json_api/wp_json_api.dart';
 
-class AccountLoginPage extends StatefulWidget {
-  static String path = "/account-login";
+class AccountLoginPage extends NyStatefulWidget {
+  static RouteView path = ("/account-login", (_) => AccountLoginPage());
   final bool showBackButton;
-  AccountLoginPage({this.showBackButton = true});
-
-  @override
-  createState() => _AccountLoginPageState();
+  AccountLoginPage({super.key, this.showBackButton = true})
+      : super(child: () => _AccountLoginPageState());
 }
 
-class _AccountLoginPageState extends NyState<AccountLoginPage> {
-  final TextEditingController _tfEmailController = TextEditingController(),
-      _tfPasswordController = TextEditingController();
+class _AccountLoginPageState extends NyPage<AccountLoginPage> {
+  LoginForm form = LoginForm();
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
+          children: [
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
+                children: [
                   StoreLogo(height: 100),
                   Flexible(
                     child: Container(
@@ -75,32 +74,29 @@ class _AccountLoginPageState extends NyState<AccountLoginPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       boxShadow:
-                          (Theme.of(context).brightness == Brightness.light)
-                              ? wsBoxShadow()
-                              : null,
+                      (Theme.of(context).brightness == Brightness.light)
+                          ? wsBoxShadow()
+                          : null,
                       color: ThemeColor.get(context).backgroundContainer,
                     ),
-                    padding: EdgeInsets.symmetric(vertical: 18, horizontal: 8),
+                    padding:
+                    EdgeInsets.only(top: 20, bottom: 15, left: 16, right: 16),
                     margin: EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        TextEditingRow(
-                            heading: trans("Email"),
-                            controller: _tfEmailController,
-                            keyboardType: TextInputType.emailAddress),
-                        TextEditingRow(
-                            heading: trans("Password"),
-                            controller: _tfPasswordController,
-                            keyboardType: TextInputType.visiblePassword,
-                            obscureText: true),
-                        PrimaryButton(
-                          title: trans("Login"),
-                          isLoading: isLocked('login_button'),
-                          action: _loginUser,
-                        ),
-                      ],
+                    child: NyForm(
+                        form: form,
+                        crossAxisSpacing: 15,
+                        footer: Padding(
+                            padding: EdgeInsets.only(top: 20),
+                            child: Button.primary(
+                              text: trans("Login"),
+                              submitForm: (
+                              form,
+                                  (data) async {
+                                await _loginUser(
+                                    data['email'], data['password']);
+                              }
+                              ),
+                            ))
                     ),
                   ),
                 ],
@@ -118,11 +114,11 @@ class _AccountLoginPageState extends NyState<AccountLoginPage> {
                         : Colors.white70,
                   ),
                   Padding(
+                    padding: EdgeInsets.only(left: 8),
                     child: Text(
                       trans("Create an account"),
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
-                    padding: EdgeInsets.only(left: 8),
                   )
                 ],
               ),
@@ -159,28 +155,9 @@ class _AccountLoginPageState extends NyState<AccountLoginPage> {
     );
   }
 
-  _loginUser() async {
-    String email = _tfEmailController.text;
-    String password = _tfPasswordController.text;
-
+  _loginUser(String email, String password) async {
     if (email.isNotEmpty) {
       email = email.trim();
-    }
-
-    if (email == "" || password == "") {
-      showToastNotification(context,
-          title: trans("Invalid details"),
-          description: trans("The email and password field cannot be empty"),
-          style: ToastNotificationStyleType.DANGER);
-      return;
-    }
-
-    if (!isEmail(email)) {
-      showToastNotification(context,
-          title: trans("Oops"),
-          description: trans("That email address is not valid"),
-          style: ToastNotificationStyleType.DANGER);
-      return;
     }
 
     await lockRelease('login_button', perform: () async {
@@ -189,31 +166,31 @@ class _AccountLoginPageState extends NyState<AccountLoginPage> {
         wpUserLoginResponse = await WPJsonAPI.instance.api(
             (request) => request.wpLogin(email: email, password: password));
       } on InvalidNonceException catch (_) {
-        showToastNotification(context,
+        showToast(
             title: trans("Invalid details"),
             description:
                 trans("Something went wrong, please contact our store"),
-            style: ToastNotificationStyleType.DANGER);
+            style: ToastNotificationStyleType.danger);
       } on InvalidEmailException catch (_) {
-        showToastNotification(context,
+        showToast(
             title: trans("Invalid details"),
             description: trans("That email does not match our records"),
-            style: ToastNotificationStyleType.DANGER);
+            style: ToastNotificationStyleType.danger);
       } on InvalidUsernameException catch (_) {
-        showToastNotification(context,
+        showToast(
             title: trans("Invalid details"),
             description: trans("That username does not match our records"),
-            style: ToastNotificationStyleType.DANGER);
+            style: ToastNotificationStyleType.danger);
       } on IncorrectPasswordException catch (_) {
-        showToastNotification(context,
+        showToast(
             title: trans("Invalid details"),
             description: trans("That password does not match our records"),
-            style: ToastNotificationStyleType.DANGER);
+            style: ToastNotificationStyleType.danger);
       } on Exception catch (_) {
-        showToastNotification(context,
+        showToast(
             title: trans("Oops!"),
             description: trans("Invalid login credentials"),
-            style: ToastNotificationStyleType.DANGER,
+            style: ToastNotificationStyleType.danger,
             icon: Icons.account_circle);
       }
 
@@ -227,11 +204,12 @@ class _AccountLoginPageState extends NyState<AccountLoginPage> {
 
       event<LoginEvent>();
 
-      showToastNotification(context,
+      showToast(
           title: trans("Hello"),
           description: trans("Welcome back"),
-          style: ToastNotificationStyleType.SUCCESS,
+          style: ToastNotificationStyleType.success,
           icon: Icons.account_circle);
+      if (!mounted) return;
       navigatorPush(context,
           routeName: UserAuth.instance.redirect, forgetLast: 1);
     });

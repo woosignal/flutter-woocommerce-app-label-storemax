@@ -21,8 +21,8 @@ import 'package:woosignal/models/response/product.dart';
 import 'package:woosignal/models/response/woosignal_app.dart';
 
 class ProductDetailReviewsWidget extends StatefulWidget {
-  ProductDetailReviewsWidget(
-      {required this.product, required this.wooSignalApp});
+  const ProductDetailReviewsWidget(
+      {super.key, required this.product, required this.wooSignalApp});
   final Product? product;
   final WooSignalApp? wooSignalApp;
 
@@ -35,14 +35,9 @@ class _ProductDetailReviewsWidgetState
   bool _ratingExpanded = false;
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    if (widget.product!.reviewsAllowed == false ||
-        widget.wooSignalApp!.showProductReviews == false) {
+    if (widget.product?.reviewsAllowed == false ||
+        widget.wooSignalApp?.showProductReviews == false) {
       return SizedBox.shrink();
     }
 
@@ -55,7 +50,7 @@ class _ProductDetailReviewsWidgetState
           tilePadding: EdgeInsets.symmetric(horizontal: 16),
           childrenPadding: EdgeInsets.all(0),
           title: AutoSizeText(
-            "${trans("Reviews")} (${widget.product!.ratingCount})",
+            "${trans("Reviews")} (${widget.product?.ratingCount})",
             maxLines: 1,
           ),
           onExpansionChanged: (value) {
@@ -63,14 +58,14 @@ class _ProductDetailReviewsWidgetState
               _ratingExpanded = value;
             });
           },
-          trailing: Container(
+          trailing: SizedBox(
             width: MediaQuery.of(context).size.width / 2,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 RatingBarIndicator(
-                  rating: double.parse(widget.product!.averageRating!),
+                  rating: double.parse(widget.product?.averageRating ?? "0"),
                   itemBuilder: (context, index) => Icon(
                     Icons.star,
                     color: Colors.amber,
@@ -94,11 +89,9 @@ class _ProductDetailReviewsWidgetState
                 future: fetchReviews(),
                 child: (context, reviews) {
                   if (reviews == null) {
-                    return Container(
-                      child: ListTile(
-                        title: Text(
-                          trans('There are no reviews yet.'),
-                        ),
+                    return ListTile(
+                      title: Text(
+                        trans('There are no reviews yet.'),
                       ),
                     );
                   }
@@ -112,15 +105,13 @@ class _ProductDetailReviewsWidgetState
 
                   if (reviewsCount >= 5) {
                     childrenWidgets.add(
-                      Container(
-                          child: ListTile(
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 16),
-                              title: Text(
-                                trans('See More Reviews'),
-                              ),
-                              onTap: () => routeTo(ProductReviewsPage.path,
-                                  data: widget.product))),
+                      ListTile(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                          title: Text(
+                            trans('See More Reviews'),
+                          ),
+                          onTap: () => routeTo(ProductReviewsPage.path,
+                              data: widget.product)),
                     );
                   }
                   return ListView(
@@ -129,21 +120,20 @@ class _ProductDetailReviewsWidgetState
                     padding: EdgeInsets.all(0),
                     children: reviews.isEmpty
                         ? [
-                            Container(
-                              child: ListTile(
-                                title: Text(
-                                  trans('There are no reviews yet.'),
-                                ),
+                            ListTile(
+                              title: Text(
+                                trans('There are no reviews yet.'),
                               ),
                             )
                           ]
                         : childrenWidgets,
                   );
                 },
-                loading: Padding(
+                loadingStyle: LoadingStyle.normal(
+                    child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: CupertinoActivityIndicator(),
-                ),
+                )),
               ),
           ],
         )),
@@ -152,6 +142,7 @@ class _ProductDetailReviewsWidgetState
   }
 
   Future<List<ProductReview>> fetchReviews() async {
+    if (widget.product?.id == null) return [];
     return await appWooSignal(
       (api) => api.getProductReviews(
           perPage: 5, product: [widget.product!.id!], status: "approved"),

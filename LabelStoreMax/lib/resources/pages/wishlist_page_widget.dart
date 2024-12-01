@@ -15,20 +15,20 @@ import '/resources/widgets/cached_image_widget.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 import 'package:woosignal/models/response/product.dart';
 
-class WishListPageWidget extends StatefulWidget {
-  static String path = "/wishlist";
+class WishListPageWidget extends NyStatefulWidget {
+  static RouteView path = ("/wishlist", (_) => WishListPageWidget());
 
-  @override
-  createState() => _WishListPageWidgetState();
+  WishListPageWidget({super.key})
+      : super(child: () => _WishListPageWidgetState());
 }
 
-class _WishListPageWidgetState extends NyState<WishListPageWidget> {
+class _WishListPageWidgetState extends NyPage<WishListPageWidget> {
   List<Product> _products = [];
 
   @override
-  boot() async {
-    await loadProducts();
-  }
+  get init => () async {
+        await loadProducts();
+      };
 
   loadProducts() async {
     List<dynamic> favouriteProducts = await getWishlistProducts();
@@ -46,7 +46,7 @@ class _WishListPageWidgetState extends NyState<WishListPageWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -71,8 +71,7 @@ class _WishListPageWidgetState extends NyState<WishListPageWidget> {
                             style: Theme.of(context)
                                 .textTheme
                                 .titleLarge!
-                                .setColor(
-                                    context, (color) => color!.primaryContent))
+                                .setColor(context, (color) => color!.content))
                       ],
                     ),
                   )
@@ -83,55 +82,49 @@ class _WishListPageWidgetState extends NyState<WishListPageWidget> {
                       return InkWell(
                         onTap: () =>
                             routeTo(ProductDetailPage.path, data: product),
-                        child: Container(
-                          child: Row(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(left: 8),
-                                child: CachedImageWidget(
-                                  image: (product.images.isNotEmpty
-                                      ? product.images.first.src
-                                      : getEnv("PRODUCT_PLACEHOLDER_IMAGE")),
-                                  fit: BoxFit.contain,
-                                  width: double.infinity,
-                                ),
-                                width: MediaQuery.of(context).size.width / 4,
+                        child: Row(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(left: 8),
+                              width: MediaQuery.of(context).size.width / 4,
+                              child: CachedImageWidget(
+                                image: (product.images.isNotEmpty
+                                    ? product.images.first.src
+                                    : getEnv("PRODUCT_PLACEHOLDER_IMAGE")),
+                                fit: BoxFit.contain,
+                                width: double.infinity,
                               ),
-                              Expanded(
-                                child: Container(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        product.name!,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      Text(
-                                        formatStringCurrency(
-                                            total: product.price),
-                                      ),
-                                    ],
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    product.name!,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                ),
+                                  Text(
+                                    formatStringCurrency(total: product.price),
+                                  ),
+                                ],
                               ),
-                              Container(
-                                width: MediaQuery.of(context).size.width / 5,
-                                alignment: Alignment.center,
-                                child: IconButton(
-                                  icon: Icon(
-                                    Icons.favorite,
-                                    color: Colors.red,
-                                  ),
-                                  onPressed: () => _removeFromWishlist(product),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width / 5,
+                              alignment: Alignment.center,
+                              child: IconButton(
+                                icon: Icon(
+                                  Icons.favorite,
+                                  color: Colors.red,
                                 ),
-                              )
-                            ],
-                          ),
+                                onPressed: () => _removeFromWishlist(product),
+                              ),
+                            )
+                          ],
                         ),
                       );
                     },
@@ -145,12 +138,11 @@ class _WishListPageWidgetState extends NyState<WishListPageWidget> {
 
   _removeFromWishlist(Product product) async {
     await removeWishlistProduct(product: product);
-    showToastNotification(
-      context,
-      title: trans('Success'),
-      icon: Icons.shopping_cart,
-      description: trans('Item removed'),
-    );
+    showToast(
+        title: trans('Success'),
+        description: trans('Item removed'),
+        icon: Icons.shopping_cart,
+        style: ToastNotificationStyleType.success);
     _products.remove(product);
     setState(() {});
   }

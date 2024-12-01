@@ -27,7 +27,7 @@ class AccountDetailSettingsWidget extends StatefulWidget {
 class _AccountDetailSettingsWidgetState
     extends NyState<AccountDetailSettingsWidget> {
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return ListView(
       children: <Widget>[
         Card(
@@ -36,7 +36,8 @@ class _AccountDetailSettingsWidgetState
               title: Text(trans("Update details")),
               onTap: () =>
                   routeTo(AccountProfileUpdatePage.path, onPop: (value) {
-                    StateAction.refreshPage(AccountDetailPage.path);
+                    StateAction.refreshPage(
+                        AccountDetailPage.path.nyPageName());
                   })),
         ),
         Card(

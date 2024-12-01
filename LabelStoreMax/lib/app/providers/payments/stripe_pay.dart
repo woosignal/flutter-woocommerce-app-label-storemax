@@ -63,8 +63,9 @@ stripePay(context, {TaxRate? taxRate}) async {
           title: trans("Oops!"),
           description: trans("Something went wrong, please try again."),
           icon: Icons.payment,
-          style: ToastNotificationStyleType.WARNING);
-      updateState(CheckoutConfirmationPage.path, data: {"reloadState": false});
+          style: ToastNotificationStyleType.warning);
+      updateState(CheckoutConfirmationPage.path.nyPageName(),
+          data: {"reloadState": false});
       return;
     }
 
@@ -74,7 +75,7 @@ stripePay(context, {TaxRate? taxRate}) async {
               ? ThemeMode.light
               : ThemeMode.dark,
           merchantDisplayName:
-          getEnv('APP_NAME', defaultValue: wooSignalApp?.appName),
+              getEnv('APP_NAME', defaultValue: wooSignalApp?.appName),
           customerId: rsp!['customer'],
           paymentIntentClientSecret: rsp!['client_secret'],
           customerEphemeralKeySecret: rsp!['ephemeral_key'],
@@ -92,7 +93,7 @@ stripePay(context, {TaxRate? taxRate}) async {
         title: trans("Oops!"),
         description: trans("Something went wrong, please try again."),
         icon: Icons.payment,
-        style: ToastNotificationStyleType.WARNING,
+        style: ToastNotificationStyleType.warning,
       );
     }
 
@@ -100,7 +101,8 @@ stripePay(context, {TaxRate? taxRate}) async {
       return;
     }
 
-    updateState(CheckoutConfirmationPage.path, data: {"reloadState": true});
+    updateState(CheckoutConfirmationPage.path.nyPageName(),
+        data: {"reloadState": true});
 
     OrderWC orderWC = await buildOrderWC(taxRate: taxRate);
     Order? order = await (appWooSignal((api) => api.createOrder(orderWC)));
@@ -111,7 +113,8 @@ stripePay(context, {TaxRate? taxRate}) async {
         title: trans("Error"),
         description: trans("Something went wrong, please contact our store"),
       );
-      updateState(CheckoutConfirmationPage.path, data: {"reloadState": false});
+      updateState(CheckoutConfirmationPage.path.nyPageName(),
+          data: {"reloadState": false});
       return;
     }
 
@@ -126,9 +129,10 @@ stripePay(context, {TaxRate? taxRate}) async {
       title: trans("Oops!"),
       description: e.error.localizedMessage!,
       icon: Icons.payment,
-      style: ToastNotificationStyleType.WARNING,
+      style: ToastNotificationStyleType.warning,
     );
-    updateState(CheckoutConfirmationPage.path, data: {"reloadState": false});
+    updateState(CheckoutConfirmationPage.path.nyPageName(),
+        data: {"reloadState": false});
   } catch (ex) {
     if (getEnv('APP_DEBUG', defaultValue: true)) {
       NyLogger.error(ex.toString());
@@ -138,8 +142,9 @@ stripePay(context, {TaxRate? taxRate}) async {
       title: trans("Oops!"),
       description: trans("Something went wrong, please try again."),
       icon: Icons.payment,
-      style: ToastNotificationStyleType.WARNING,
+      style: ToastNotificationStyleType.warning,
     );
-    updateState(CheckoutConfirmationPage.path, data: {"reloadState": false});
+    updateState(CheckoutConfirmationPage.path.nyPageName(),
+        data: {"reloadState": false});
   }
 }

@@ -14,7 +14,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 import '/resources/widgets/cart_quantity_widget.dart';
 
 class CartIconWidget extends StatefulWidget {
-  CartIconWidget({super.key});
+  const CartIconWidget({super.key});
 
   @override
   createState() => _CartIconWidgetState();
@@ -23,24 +23,24 @@ class CartIconWidget extends StatefulWidget {
 class _CartIconWidgetState extends State<CartIconWidget> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 70,
       child: IconButton(
         icon: Stack(
           children: <Widget>[
             Positioned.fill(
-              child: Align(
-                child: Icon(Icons.shopping_cart, size: 20),
-                alignment: Alignment.bottomCenter,
-              ),
               bottom: 0,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Icon(Icons.shopping_cart, size: 20),
+              ),
             ),
             Positioned.fill(
-              child: Align(
-                child: CartQuantity(),
-                alignment: Alignment.topCenter,
-              ),
               top: 0,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: CartQuantity(),
+              ),
             )
           ],
         ),

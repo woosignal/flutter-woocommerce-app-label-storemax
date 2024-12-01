@@ -4,54 +4,65 @@ import '/app/models/cart_line_item.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class CartQuantity extends StatefulWidget {
-  CartQuantity({super.key, this.childOfNavBar = false});
+  const CartQuantity({super.key, this.childOfNavBar = false});
 
   final bool childOfNavBar;
 
   static String state = "cart_quantity";
 
   @override
-  createState() => _CartQuantityState(childOfNavBar);
+  createState() => _CartQuantityState();
 }
 
 class _CartQuantityState extends NyState<CartQuantity> {
-  bool _childOfNavBar = false;
 
-  _CartQuantityState(childOfNavBar) {
+  int total = 0;
+
+  _CartQuantityState() {
     stateName = CartQuantity.state;
-    _childOfNavBar = childOfNavBar;
   }
 
   @override
+  LoadingStyle loadingStyle = LoadingStyle.none();
+
+  @override
+  get init => () async {
+    List<CartLineItem> cartItems = await Cart.getInstance.getCart();
+    List<int?> cartItemQuantity = cartItems.map((e) => e.quantity).toList();
+
+    if (cartItemQuantity.isEmpty) return;
+
+    total = cartItemQuantity
+        .reduce((value, element) => value! + element!) ?? 0;
+  };
+
+  @override
   stateUpdated(dynamic data) async {
+    List<CartLineItem> cartItems = await Cart.getInstance.getCart();
+    List<int?> cartItemQuantity = cartItems.map((e) => e.quantity).toList();
+
+    if (cartItemQuantity.isEmpty) return;
+
+    total = cartItemQuantity
+        .reduce((value, element) => value! + element!) ?? 0;
+
     setState(() {});
   }
 
   @override
-  Widget build(BuildContext context) {
-    return NyFutureBuilder<List<CartLineItem>>(
-      future: Cart.getInstance.getCart(),
-      child: (BuildContext context, data) {
-        if (data == null) {
-          return SizedBox.shrink();
-        }
-        List<int?> cartItems = data.map((e) => e.quantity).toList();
-        String cartValue = "0";
-        if (cartItems.isNotEmpty) {
-          cartValue = cartItems
-              .reduce((value, element) => value! + element!)
-              .toString();
-        }
-        if (cartValue == "0" && _childOfNavBar == true) {
-          return SizedBox.shrink();
-        }
-        return Text(
-          cartValue,
-          style: Theme.of(context).textTheme.bodyMedium,
-          textAlign: TextAlign.center,
-        );
-      },
-      loading: SizedBox.shrink(),
+  Widget view(BuildContext context) {
+    if (total == 0) {
+      return SizedBox.shrink();
+    }
+
+    if (total == 0 && widget.childOfNavBar == true) {
+      return SizedBox.shrink();
+    }
+
+    return Text(
+      total.toString(),
+      style: Theme.of(context).textTheme.bodyMedium,
+      textAlign: TextAlign.center,
     );
   }
 }

@@ -26,17 +26,15 @@ import 'package:wp_json_api/exceptions/username_taken_exception.dart';
 import 'package:wp_json_api/models/responses/wp_user_register_response.dart';
 import 'package:wp_json_api/wp_json_api.dart';
 
-class AccountRegistrationPage extends StatefulWidget {
-  static String path = "/account-register";
-  AccountRegistrationPage();
+class AccountRegistrationPage extends NyStatefulWidget {
+  static RouteView path =
+      ("/account-register", (_) => AccountRegistrationPage());
 
-  @override
-  createState() => _AccountRegistrationPageState();
+  AccountRegistrationPage({super.key})
+      : super(child: () => _AccountRegistrationPageState());
 }
 
-class _AccountRegistrationPageState extends NyState<AccountRegistrationPage> {
-  _AccountRegistrationPageState();
-
+class _AccountRegistrationPageState extends NyPage<AccountRegistrationPage> {
   final TextEditingController _tfEmailAddressController =
           TextEditingController(),
       _tfPasswordController = TextEditingController(),
@@ -46,7 +44,7 @@ class _AccountRegistrationPageState extends NyState<AccountRegistrationPage> {
   final WooSignalApp? _wooSignalApp = AppHelper.instance.appConfig;
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -95,15 +93,17 @@ class _AccountRegistrationPageState extends NyState<AccountRegistrationPage> {
               obscureText: true,
             ),
             Padding(
+              padding: EdgeInsets.only(top: 10),
               child: PrimaryButton(
                 title: trans("Sign up"),
                 isLoading: isLocked('register_user'),
                 action: _signUpTapped,
               ),
-              padding: EdgeInsets.only(top: 10),
             ),
             Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
               child: InkWell(
+                onTap: _viewTOSModal,
                 child: RichText(
                   text: TextSpan(
                     text:
@@ -125,9 +125,7 @@ class _AccountRegistrationPageState extends NyState<AccountRegistrationPage> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                onTap: _viewTOSModal,
               ),
-              padding: EdgeInsets.symmetric(vertical: 16),
             ),
           ],
         ),
@@ -146,18 +144,18 @@ class _AccountRegistrationPageState extends NyState<AccountRegistrationPage> {
     }
 
     if (!isEmail(email)) {
-      showToastNotification(context,
+      showToast(
           title: trans("Oops"),
           description: trans("That email address is not valid"),
-          style: ToastNotificationStyleType.DANGER);
+          style: ToastNotificationStyleType.danger);
       return;
     }
 
     if (password.length <= 5) {
-      showToastNotification(context,
+      showToast(
           title: trans("Oops"),
           description: trans("Password must be a min 6 characters"),
-          style: ToastNotificationStyleType.DANGER);
+          style: ToastNotificationStyleType.danger);
       return;
     }
 
@@ -175,58 +173,56 @@ class _AccountRegistrationPageState extends NyState<AccountRegistrationPage> {
           ),
         );
       } on UsernameTakenException catch (e) {
-        showToastNotification(context,
+        showToast(
             title: trans("Oops!"),
             description: trans(e.message),
-            style: ToastNotificationStyleType.DANGER);
+            style: ToastNotificationStyleType.danger);
       } on InvalidNonceException catch (_) {
-        showToastNotification(context,
+        showToast(
             title: trans("Invalid details"),
             description:
                 trans("Something went wrong, please contact our store"),
-            style: ToastNotificationStyleType.DANGER);
+            style: ToastNotificationStyleType.danger);
       } on ExistingUserLoginException catch (_) {
-        showToastNotification(context,
+        showToast(
             title: trans("Oops!"),
             description: trans("A user already exists"),
-            style: ToastNotificationStyleType.DANGER);
+            style: ToastNotificationStyleType.danger);
       } on ExistingUserEmailException catch (_) {
-        showToastNotification(context,
+        showToast(
             title: trans("Oops!"),
             description: trans("That email is taken, try another"),
-            style: ToastNotificationStyleType.DANGER);
+            style: ToastNotificationStyleType.danger);
       } on UserAlreadyExistException catch (_) {
-        showToastNotification(context,
+        showToast(
             title: trans("Oops!"),
             description: trans("A user already exists"),
-            style: ToastNotificationStyleType.DANGER);
+            style: ToastNotificationStyleType.danger);
       } on EmptyUsernameException catch (e) {
-        showToastNotification(context,
+        showToast(
             title: trans("Oops!"),
             description: trans(e.message),
-            style: ToastNotificationStyleType.DANGER);
-      } on Exception catch (_) {
-        showToastNotification(context,
+            style: ToastNotificationStyleType.danger);
+      } on Exception catch (e) {
+        printError(e.toString());
+        showToast(
             title: trans("Oops!"),
             description: trans("Something went wrong"),
-            style: ToastNotificationStyleType.DANGER);
+            style: ToastNotificationStyleType.danger);
       }
 
-      if (wpUserRegisterResponse == null) {
-        return;
-      }
-
-      if (wpUserRegisterResponse.status != 200) {
+      if (wpUserRegisterResponse?.status != 200) {
         return;
       }
 
       event<LoginEvent>();
 
-      showToastNotification(context,
+      showToast(
           title: "${trans("Hello")} $firstName",
           description: trans("you're now logged in"),
-          style: ToastNotificationStyleType.SUCCESS,
+          style: ToastNotificationStyleType.success,
           icon: Icons.account_circle);
+      if (!mounted) return;
       navigatorPush(context,
           routeName: UserAuth.instance.redirect, forgetLast: 2);
     });

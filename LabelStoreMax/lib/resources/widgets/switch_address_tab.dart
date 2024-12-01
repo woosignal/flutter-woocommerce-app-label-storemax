@@ -37,8 +37,14 @@ class SwitchAddressTab extends StatelessWidget {
 
     return Flexible(
       child: InkWell(
+        onTap: onTapAction,
         child: Container(
           width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            color: isActive ? Colors.black : Colors.white,
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
           child: Text(
             title,
             style: Theme.of(context).textTheme.titleMedium!.copyWith(
@@ -46,13 +52,7 @@ class SwitchAddressTab extends StatelessWidget {
                 ),
             textAlign: TextAlign.center,
           ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
-            color: isActive ? Colors.black : Colors.white,
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
         ),
-        onTap: onTapAction,
       ),
     );
   }

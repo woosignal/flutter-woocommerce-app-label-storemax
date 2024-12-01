@@ -16,24 +16,22 @@ import 'package:wp_json_api/models/responses/wp_user_info_response.dart';
 import 'package:wp_json_api/models/responses/wp_user_info_updated_response.dart';
 import 'package:wp_json_api/wp_json_api.dart';
 
-class AccountProfileUpdatePage extends StatefulWidget {
-  static String path = "/account-update";
-  AccountProfileUpdatePage();
+class AccountProfileUpdatePage extends NyStatefulWidget {
+  static RouteView path =
+      ("/account-update", (_) => AccountProfileUpdatePage());
 
-  @override
-  createState() => _AccountProfileUpdatePageState();
+  AccountProfileUpdatePage({super.key})
+      : super(child: () => _AccountProfileUpdatePageState());
 }
 
-class _AccountProfileUpdatePageState extends NyState<AccountProfileUpdatePage> {
-  _AccountProfileUpdatePageState();
-
+class _AccountProfileUpdatePageState extends NyPage<AccountProfileUpdatePage> {
   final TextEditingController _tfFirstName = TextEditingController(),
       _tfLastName = TextEditingController();
 
   @override
-  boot() async {
-    await _fetchUserDetails();
-  }
+  get init => () async {
+        await _fetchUserDetails();
+      };
 
   _fetchUserDetails() async {
     WPUserInfoResponse wpUserInfoResponse =
@@ -63,6 +61,8 @@ class _AccountProfileUpdatePageState extends NyState<AccountProfileUpdatePage> {
             children: [
               Expanded(
                 child: Container(
+                  margin: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -100,8 +100,6 @@ class _AccountProfileUpdatePageState extends NyState<AccountProfileUpdatePage> {
                       )
                     ],
                   ),
-                  margin: EdgeInsets.all(8),
-                  padding: EdgeInsets.all(8),
                 ),
               ),
             ],
@@ -125,19 +123,18 @@ class _AccountProfileUpdatePageState extends NyState<AccountProfileUpdatePage> {
                 (request) => request.wpUpdateUserInfo(
                     firstName: firstName, lastName: lastName));
           } on Exception catch (_) {
-            showToastNotification(context,
+            showToast(
                 title: trans("Invalid details"),
                 description: trans("Please check your email and password"),
-                style: ToastNotificationStyleType.DANGER);
+                style: ToastNotificationStyleType.danger);
           }
 
-          if (wpUserInfoUpdatedResponse != null &&
-              wpUserInfoUpdatedResponse.status == 200) {
-            showToastNotification(context,
+          if (wpUserInfoUpdatedResponse?.status == 200) {
+            showToast(
                 title: trans("Success"),
                 description: trans("Account updated"),
-                style: ToastNotificationStyleType.SUCCESS);
-            Navigator.pop(context);
+                style: ToastNotificationStyleType.success);
+            pop();
           }
         },
         lockRelease: "update_account");

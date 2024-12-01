@@ -85,7 +85,7 @@ class _CheckoutSelectCouponWidgetState
         title: trans("Oops"),
         description:
             trans("Please select add your billing/shipping address to proceed"),
-        style: ToastNotificationStyleType.WARNING,
+        style: ToastNotificationStyleType.warning,
         icon: Icons.local_shipping,
       );
 
@@ -98,7 +98,7 @@ class _CheckoutSelectCouponWidgetState
         widget.context,
         title: trans("Oops"),
         description: trans("Your billing/shipping details are incomplete"),
-        style: ToastNotificationStyleType.WARNING,
+        style: ToastNotificationStyleType.warning,
         icon: Icons.local_shipping,
       );
       return;

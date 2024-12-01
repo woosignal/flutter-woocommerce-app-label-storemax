@@ -22,20 +22,16 @@ class TextRowWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Flexible(
-          child: Container(
-            child: Text(title!, style: Theme.of(context).textTheme.titleLarge),
-          ),
           flex: 3,
+          child: Text(title!, style: Theme.of(context).textTheme.titleLarge),
         ),
         Flexible(
-          child: Container(
-            child: Text(
-              text ?? "",
-              style:
-                  Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 16),
-            ),
-          ),
           flex: 3,
+          child: Text(
+            text ?? "",
+            style:
+                Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 16),
+          ),
         )
       ],
     );

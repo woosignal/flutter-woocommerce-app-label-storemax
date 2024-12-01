@@ -30,82 +30,64 @@ import 'package:nylo_framework/nylo_framework.dart';
 |-------------------------------------------------------------------------- */
 
 appRouter() => nyRoutes((router) {
-      router.route(HomePage.path, (context) => HomePage(), initialRoute: true);
+      router.add(HomePage.path).initialRoute();
 
-      router.route(CartPage.path, (context) => CartPage());
+      router.add(CartPage.path);
 
-      router.route(CheckoutConfirmationPage.path,
-          (context) => CheckoutConfirmationPage());
+      router.add(CheckoutConfirmationPage.path);
 
-      router.route(BrowseCategoryPage.path, (context) => BrowseCategoryPage(),
+      router.add(BrowseCategoryPage.path, transition: PageTransitionType.fade);
+
+      router.add(BrowseSearchPage.path, transition: PageTransitionType.fade);
+
+      router.add(ProductDetailPage.path);
+
+      router.add(ProductReviewsPage.path);
+
+      router.add(LeaveReviewPage.path);
+
+      router.add(ProductImageViewerPage.path,
           transition: PageTransitionType.fade);
 
-      router.route(BrowseSearchPage.path, (context) => BrowseSearchPage(),
-          transition: PageTransitionType.fade);
+      router.add(WishListPageWidget.path);
 
-      router.route(ProductDetailPage.path, (context) => ProductDetailPage(),
-          transition: PageTransitionType.rightToLeftWithFade);
+      router.add(AccountOrderDetailPage.path);
 
-      router.route(ProductReviewsPage.path, (context) => ProductReviewsPage(),
-          transition: PageTransitionType.rightToLeftWithFade);
+      router.add(CheckoutStatusPage.path);
 
-      router.route(LeaveReviewPage.path, (context) => LeaveReviewPage(),
-          transition: PageTransitionType.rightToLeftWithFade);
-
-      router.route(
-          ProductImageViewerPage.path, (context) => ProductImageViewerPage(),
-          transition: PageTransitionType.fade);
-
-      router.route(WishListPageWidget.path, (context) => WishListPageWidget(),
-          transition: PageTransitionType.rightToLeftWithFade);
-
-      router.route(
-          AccountOrderDetailPage.path, (context) => AccountOrderDetailPage(),
-          transition: PageTransitionType.rightToLeftWithFade);
-
-      router.route(CheckoutStatusPage.path, (context) => CheckoutStatusPage(),
-          transition: PageTransitionType.rightToLeftWithFade);
-
-      router.route(CheckoutDetailsPage.path, (context) => CheckoutDetailsPage(),
+      router.add(CheckoutDetailsPage.path,
           transition: PageTransitionType.bottomToTop);
 
-      router.route(
-          CheckoutPaymentTypePage.path, (context) => CheckoutPaymentTypePage(),
+      router.add(CheckoutPaymentTypePage.path,
           transition: PageTransitionType.bottomToTop);
 
-      router.route(CheckoutShippingTypePage.path,
-          (context) => CheckoutShippingTypePage(),
+      router.add(CheckoutShippingTypePage.path,
           transition: PageTransitionType.bottomToTop);
 
-      router.route(CouponPage.path, (context) => CouponPage(),
+      router.add(CouponPage.path, transition: PageTransitionType.bottomToTop);
+
+      router.add(HomeSearchPage.path,
           transition: PageTransitionType.bottomToTop);
 
-      router.route(HomeSearchPage.path, (context) => HomeSearchPage(),
+      router.add(CustomerCountriesPage.path,
           transition: PageTransitionType.bottomToTop);
 
-      router.route(
-          CustomerCountriesPage.path, (context) => CustomerCountriesPage(),
-          transition: PageTransitionType.bottomToTop);
-
-      router.route(NoConnectionPage.path, (context) => NoConnectionPage());
+      router.add(NoConnectionPage.path);
 
       // Account Section
 
-      router.route(AccountLoginPage.path, (context) => AccountLoginPage(),
+      router.add(AccountLoginPage.path,
           transition: PageTransitionType.bottomToTop);
 
-      router.route(
-          AccountRegistrationPage.path, (context) => AccountRegistrationPage());
+      router.add(AccountRegistrationPage.path);
 
-      router.route(AccountDetailPage.path, (context) => AccountDetailPage());
+      router.add(AccountDetailPage.path);
 
-      router.route(AccountProfileUpdatePage.path,
-          (context) => AccountProfileUpdatePage());
+      router.add(AccountProfileUpdatePage.path);
 
-      router.route(AccountDeletePage.path, (context) => AccountDeletePage());
+      router.add(AccountDeletePage.path);
 
-      router.route(AccountShippingDetailsPage.path,
-          (context) => AccountShippingDetailsPage());
+      router.add(AccountShippingDetailsPage.path);
 
-      router.route(NotificationsPage.path, (context) => NotificationsPage());
+      router.add(NotificationsPage.path);
     });

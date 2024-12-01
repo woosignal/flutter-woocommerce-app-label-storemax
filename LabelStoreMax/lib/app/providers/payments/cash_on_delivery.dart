@@ -29,7 +29,8 @@ cashOnDeliveryPay(context, {TaxRate? taxRate}) async {
         title: trans("Error"),
         description: trans("Something went wrong, please contact our store"),
       );
-      updateState(CheckoutConfirmationPage.path, data: {"reloadState": false});
+      updateState(CheckoutConfirmationPage.path.nyPageName(),
+          data: {"reloadState": false});
       return;
     }
     routeTo(CheckoutStatusPage.path, data: order);
@@ -39,6 +40,7 @@ cashOnDeliveryPay(context, {TaxRate? taxRate}) async {
       title: trans("Error"),
       description: trans("Something went wrong, please contact our store"),
     );
-    updateState(CheckoutConfirmationPage.path, data: {"reloadState": false});
+    updateState(CheckoutConfirmationPage.path.nyPageName(),
+        data: {"reloadState": false});
   }
 }

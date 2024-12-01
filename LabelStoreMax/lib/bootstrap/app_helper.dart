@@ -14,6 +14,5 @@ class AppHelper {
   AppHelper._privateConstructor();
 
   static final AppHelper instance = AppHelper._privateConstructor();
-
   WooSignalApp? appConfig;
 }

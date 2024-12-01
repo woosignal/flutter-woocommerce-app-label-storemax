@@ -126,7 +126,7 @@ Future<OrderWC> buildOrderWC({TaxRate? taxRate, bool markPaid = true}) async {
     orderWC.couponLines!.add(couponLine);
   }
 
-  if (checkoutSession.customerNote != null && checkoutSession.customerNote!.isNotEmpty) {
+  if (checkoutSession.customerNote?.isNotEmpty ?? false) {
     orderWC.customerNote = checkoutSession.customerNote;
   }
 

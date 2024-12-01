@@ -16,27 +16,24 @@ import '/resources/widgets/safearea_widget.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 import 'package:woosignal/models/response/woosignal_app.dart';
 
-class NoConnectionPage extends StatefulWidget {
-  static String path = "/no-connection";
-  NoConnectionPage();
+class NoConnectionPage extends NyStatefulWidget {
+  static RouteView path = ("/no-connection", (_) => NoConnectionPage());
 
-  @override
-  createState() => _NoConnectionPageState();
+  NoConnectionPage({super.key}) : super(child: () => _NoConnectionPageState());
 }
 
-class _NoConnectionPageState extends State<NoConnectionPage> {
+class _NoConnectionPageState extends NyPage<NoConnectionPage> {
   _NoConnectionPageState();
 
   @override
-  void initState() {
-    super.initState();
-    if (getEnv('APP_DEBUG') == true) {
-      NyLogger.error('WooCommerce site is not connected');
-    }
-  }
+  get init => () {
+        if (getEnv('APP_DEBUG') == true) {
+          NyLogger.error('WooCommerce site is not connected');
+        }
+      };
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return Scaffold(
       body: SafeAreaWidget(
         child: Center(
@@ -69,8 +66,11 @@ class _NoConnectionPageState extends State<NoConnectionPage> {
     WooSignalApp? wooSignalApp = await (appWooSignal((api) => api.getApp()));
 
     if (wooSignalApp == null) {
-      showToastNotification(context,
-          title: trans("Oops"), description: trans("Retry later"));
+      showToast(
+          title: trans("Oops"),
+          description: trans("Retry later"),
+          icon: Icons.info_outline,
+          style: ToastNotificationStyleType.info);
       return;
     }
 

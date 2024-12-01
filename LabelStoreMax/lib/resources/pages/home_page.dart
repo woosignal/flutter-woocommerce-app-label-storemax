@@ -10,6 +10,7 @@
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import '/app/events/category_notification_event.dart';
 import '/resources/pages/account_order_detail_page.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 import '/app/events/firebase_on_message_order_event.dart';
@@ -22,23 +23,20 @@ import '/resources/widgets/mello_theme_widget.dart';
 import '/resources/widgets/notic_theme_widget.dart';
 import 'package:woosignal/models/response/woosignal_app.dart';
 
-class HomePage extends StatefulWidget {
-  static String path = "/home";
-  HomePage();
+class HomePage extends NyStatefulWidget {
+  static RouteView path = ("/home", (_) => HomePage());
 
-  @override
-  createState() => _HomePageState();
+  HomePage({super.key}) : super(child: () => _HomePageState());
 }
 
-class _HomePageState extends NyState<HomePage> {
-  _HomePageState();
-
+class _HomePageState extends NyPage<HomePage> {
   final WooSignalApp? _wooSignalApp = AppHelper.instance.appConfig;
 
   @override
-  init() async {
-    await _enableFcmNotifications();
-  }
+  get init => () async {
+        await _enableFcmNotifications();
+        await sleep(4);
+      };
 
   _enableFcmNotifications() async {
     bool? firebaseFcmIsEnabled =
@@ -56,6 +54,11 @@ class _HomePageState extends NyState<HomePage> {
       /// WP Notify - Order notification
       if (message.data.containsKey('order_id')) {
         event<OrderNotificationEvent>(data: {"RemoteMessage": message});
+      }
+
+      /// WooSignal - Category notification
+      if (message.data.containsKey('category_id')) {
+        event<CategoryNotificationEvent>(data: {"RemoteMessage": message});
       }
     });
 
@@ -106,7 +109,7 @@ class _HomePageState extends NyState<HomePage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return match(
         AppHelper.instance.appConfig?.theme,
         () => {

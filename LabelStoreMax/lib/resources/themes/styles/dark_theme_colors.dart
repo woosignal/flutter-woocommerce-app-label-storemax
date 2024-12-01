@@ -14,7 +14,7 @@ class DarkThemeColors implements ColorStyles {
   Color get backgroundContainer => const Color(0xFF4a4a4a);
 
   @override
-  Color get primaryContent => Color(int.parse(
+  Color get content => Color(int.parse(
       AppHelper.instance.appConfig!.themeColors!['dark']['primary_text']));
   @override
   Color get primaryAccent => const Color(0xFF818181);
@@ -41,7 +41,7 @@ class DarkThemeColors implements ColorStyles {
   Color get buttonBackground => Color(int.parse(
       AppHelper.instance.appConfig!.themeColors!['dark']['button_background']));
   @override
-  Color get buttonPrimaryContent => Color(int.parse(
+  Color get buttonContent => Color(int.parse(
       AppHelper.instance.appConfig!.themeColors!['dark']['button_text']));
 
   // bottom tab bar
@@ -59,4 +59,10 @@ class DarkThemeColors implements ColorStyles {
   Color get bottomTabBarLabelUnselected => Colors.white54;
   @override
   Color get bottomTabBarLabelSelected => Colors.white;
+
+  @override
+  Color get buttonSecondaryBackground => Colors.black;
+
+  @override
+  Color get buttonSecondaryContent => Colors.white;
 }

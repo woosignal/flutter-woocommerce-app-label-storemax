@@ -10,7 +10,7 @@
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/resources/widgets/store_logo_widget.dart';
+import '/resources/widgets/store_logo_widget.dart';
 import '/resources/widgets/product_item_container_widget.dart';
 import '/resources/pages/browse_category_page.dart';
 import '/resources/pages/home_search_page.dart';
@@ -31,7 +31,7 @@ import 'package:woosignal/models/response/product_category.dart' as ws_category;
 import 'package:woosignal/models/response/product.dart' as ws_product;
 
 class MelloThemeWidget extends StatefulWidget {
-  MelloThemeWidget({super.key, required this.wooSignalApp});
+  const MelloThemeWidget({super.key, required this.wooSignalApp});
   final WooSignalApp? wooSignalApp;
 
   @override
@@ -42,9 +42,9 @@ class _MelloThemeWidgetState extends NyState<MelloThemeWidget> {
   List<ws_category.ProductCategory> _categories = [];
 
   @override
-  boot() async {
-    await _fetchCategories();
-  }
+  get init => () async {
+        await _fetchCategories();
+      };
 
   _fetchCategories() async {
     if ((widget.wooSignalApp?.productCategoryCollections ?? []).isNotEmpty) {
@@ -102,8 +102,8 @@ class _MelloThemeWidgetState extends NyState<MelloThemeWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    List<String>? bannerImages = widget.wooSignalApp!.bannerImages;
+  Widget view(BuildContext context) {
+    List<String>? bannerImages = widget.wooSignalApp?.bannerImages;
     return Scaffold(
       drawer: HomeDrawerWidget(
         wooSignalApp: widget.wooSignalApp,
@@ -132,7 +132,8 @@ class _MelloThemeWidgetState extends NyState<MelloThemeWidget> {
           header: Column(
             children: [
               if (bannerImages!.isNotEmpty)
-                Container(
+                SizedBox(
+                  height: 300,
                   child: Swiper(
                     itemBuilder: (BuildContext context, int index) {
                       return CachedImageWidget(
@@ -144,14 +145,13 @@ class _MelloThemeWidgetState extends NyState<MelloThemeWidget> {
                     viewportFraction: 0.8,
                     scale: 0.9,
                   ),
-                  height: 300,
                 ),
               TopNavWidget(onPressBrowseCategories: _modalBottomSheetMenu),
             ],
           ),
           child: (context, product) {
             product as ws_product.Product;
-            return Container(
+            return SizedBox(
               height: 300,
               child: ProductItemContainer(
                 product: product,

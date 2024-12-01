@@ -18,19 +18,19 @@ import 'package:woosignal/models/response/product.dart';
 import 'package:woosignal/models/response/product_review.dart';
 
 class ProductReviewsPage extends NyStatefulWidget {
-  static String path = "/product-reviews";
+  static RouteView path = ("/product-reviews", (_) => ProductReviewsPage());
 
-  ProductReviewsPage({Key? key})
-      : super(path, key: key, child: _ProductReviewsPageState());
+  ProductReviewsPage({super.key})
+      : super(child: () => _ProductReviewsPageState());
 }
 
-class _ProductReviewsPageState extends NyState<ProductReviewsPage> {
+class _ProductReviewsPageState extends NyPage<ProductReviewsPage> {
   Product? _product;
 
   @override
-  boot() async {
-    _product = widget.data() as Product?;
-  }
+  get init => () async {
+        _product = widget.data() as Product?;
+      };
 
   @override
   Widget view(BuildContext context) {
@@ -52,16 +52,14 @@ class _ProductReviewsPageState extends NyState<ProductReviewsPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    child: Text(
-                      _product!.name!,
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
+                  Text(
+                    _product?.name ?? "",
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 8),
                     child: Text(
-                      "${_product!.ratingCount} Reviews",
+                      "${_product?.ratingCount} Reviews",
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
@@ -70,12 +68,12 @@ class _ProductReviewsPageState extends NyState<ProductReviewsPage> {
                       Container(
                         margin: EdgeInsets.only(right: 8),
                         child: Text(
-                          "${_product!.averageRating!} Stars",
+                          "${_product?.averageRating!} Stars",
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ),
                       RatingBarIndicator(
-                        rating: double.parse(_product!.averageRating!),
+                        rating: double.parse(_product?.averageRating ?? "0"),
                         itemBuilder: (context, index) => Icon(
                           Icons.star,
                           color: Colors.amber,

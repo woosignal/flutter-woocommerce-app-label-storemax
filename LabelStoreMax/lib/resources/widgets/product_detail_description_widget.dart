@@ -22,7 +22,8 @@ class ProductDetailDescriptionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (product!.shortDescription!.isEmpty && product!.description!.isEmpty) {
+    if ((product?.shortDescription?.isEmpty ?? false) &&
+        (product?.description?.isEmpty ?? false)) {
       return SizedBox.shrink();
     }
 
@@ -45,9 +46,12 @@ class ProductDetailDescriptionWidget extends StatelessWidget {
                     .copyWith(fontSize: 18),
                 textAlign: TextAlign.left,
               ),
-              if (product!.shortDescription!.isNotEmpty &&
-                  product!.description!.isNotEmpty)
+              if ((product?.shortDescription?.isNotEmpty ?? false) &&
+                  (product?.description?.isNotEmpty ?? false))
                 MaterialButton(
+                  height: 50,
+                  minWidth: 60,
+                  onPressed: () => _modalBottomSheetMenu(context),
                   child: Text(
                     trans("Full description"),
                     style: Theme.of(context)
@@ -57,9 +61,6 @@ class ProductDetailDescriptionWidget extends StatelessWidget {
                     textAlign: TextAlign.right,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  height: 50,
-                  minWidth: 60,
-                  onPressed: () => _modalBottomSheetMenu(context),
                 ),
             ],
           ),
@@ -67,9 +68,9 @@ class ProductDetailDescriptionWidget extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16),
           child: HtmlWidget(
-              product!.shortDescription!.isNotEmpty
-                  ? product!.shortDescription!
-                  : product!.description!,
+              (product?.shortDescription?.isNotEmpty ?? false)
+                  ? product?.shortDescription ?? ""
+                  : product?.description ?? "",
               renderMode: RenderMode.column, onTapUrl: (String url) async {
             await launchUrl(Uri.parse(url));
             return true;
@@ -84,7 +85,7 @@ class ProductDetailDescriptionWidget extends StatelessWidget {
       context,
       title: trans("Description"),
       bodyWidget: SingleChildScrollView(
-        child: HtmlWidget(product!.description!),
+        child: HtmlWidget(product?.description ?? ""),
       ),
     );
   }

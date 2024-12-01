@@ -11,7 +11,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/resources/widgets/store_logo_widget.dart';
+import '/resources/widgets/store_logo_widget.dart';
 import '/resources/widgets/notification_icon_widget.dart';
 import '/resources/widgets/product_item_container_widget.dart';
 import '/resources/pages/browse_category_page.dart';
@@ -29,7 +29,7 @@ import 'package:woosignal/models/response/woosignal_app.dart';
 import 'package:woosignal/models/response/product.dart';
 
 class CompoHomeWidget extends StatefulWidget {
-  CompoHomeWidget({super.key, required this.wooSignalApp});
+  const CompoHomeWidget({super.key, required this.wooSignalApp});
 
   final WooSignalApp? wooSignalApp;
 
@@ -38,11 +38,10 @@ class CompoHomeWidget extends StatefulWidget {
 }
 
 class _CompoHomeWidgetState extends NyState<CompoHomeWidget> {
-
   @override
-  boot() async {
-    await _loadHome();
-  }
+  get init => () async {
+        await _loadHome();
+      };
 
   _loadHome() async {
     if ((widget.wooSignalApp?.productCategoryCollections ?? []).isNotEmpty) {
@@ -99,7 +98,7 @@ class _CompoHomeWidgetState extends NyState<CompoHomeWidget> {
   Map<ProductCategory, List<Product>> categoryAndProducts = {};
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     List<String> bannerImages = widget.wooSignalApp?.bannerImages ?? [];
     return Scaffold(
@@ -124,7 +123,8 @@ class _CompoHomeWidgetState extends NyState<CompoHomeWidget> {
                 shrinkWrap: true,
                 children: [
                   if (bannerImages.isNotEmpty)
-                    Container(
+                    SizedBox(
+                      height: size.height / 2.5,
                       child: Swiper(
                         itemBuilder: (BuildContext context, int index) {
                           return CachedImageWidget(
@@ -136,7 +136,6 @@ class _CompoHomeWidgetState extends NyState<CompoHomeWidget> {
                         viewportFraction: 0.8,
                         scale: 0.9,
                       ),
-                      height: size.height / 2.5,
                     ),
                   ...categoryAndProducts.entries.map((catProds) {
                     double containerHeight = size.height / 1.1;
@@ -187,7 +186,7 @@ class _CompoHomeWidgetState extends NyState<CompoHomeWidget> {
                                     ),
                                   ),
                                   Flexible(
-                                    child: Container(
+                                    child: SizedBox(
                                       width: size.width / 4,
                                       child: LinkButton(
                                         title: trans("View All"),
@@ -210,7 +209,7 @@ class _CompoHomeWidgetState extends NyState<CompoHomeWidget> {
                               shrinkWrap: false,
                               itemBuilder: (cxt, i) {
                                 Product product = catProds.value[i];
-                                return Container(
+                                return SizedBox(
                                   height: MediaQuery.of(cxt).size.height,
                                   width: size.width / 2.5,
                                   child: ProductItemContainer(

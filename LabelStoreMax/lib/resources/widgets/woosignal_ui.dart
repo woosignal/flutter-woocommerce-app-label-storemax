@@ -50,6 +50,7 @@ class CheckoutRowLine extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
+                padding: EdgeInsets.only(bottom: 8),
                 child: Text(
                   heading,
                   style: Theme.of(context)
@@ -57,7 +58,6 @@ class CheckoutRowLine extends StatelessWidget {
                       .bodyMedium!
                       .copyWith(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                padding: EdgeInsets.only(bottom: 8),
               ),
               Flexible(
                 child: Row(
@@ -72,6 +72,8 @@ class CheckoutRowLine extends StatelessWidget {
                           leadImage,
                           Expanded(
                             child: Container(
+                              padding: EdgeInsets.only(left: 15),
+                              margin: EdgeInsets.only(right: 10),
                               child: Text(
                                 leadTitle!,
                                 style: Theme.of(context).textTheme.titleMedium,
@@ -79,8 +81,6 @@ class CheckoutRowLine extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 softWrap: false,
                               ),
-                              padding: EdgeInsets.only(left: 15),
-                              margin: EdgeInsets.only(right: 10),
                             ),
                           ),
                         ],
@@ -114,6 +114,8 @@ class TextEditingRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
+        padding: EdgeInsets.all(2),
+        height: heading == null ? 50 : 78,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -121,12 +123,14 @@ class TextEditingRow extends StatelessWidget {
             if (heading != null)
               Flexible(
                 child: Padding(
+                  padding: EdgeInsets.only(bottom: 2),
                   child: AutoSizeText(
                     heading!,
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: ThemeColor.get(context).primaryContent),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .copyWith(color: ThemeColor.get(context).content),
                   ),
-                  padding: EdgeInsets.only(bottom: 2),
                 ),
               ),
             Flexible(
@@ -142,8 +146,6 @@ class TextEditingRow extends StatelessWidget {
             )
           ],
         ),
-        padding: EdgeInsets.all(2),
-        height: heading == null ? 50 : 78,
       );
 }
 
@@ -160,21 +162,17 @@ class CheckoutMetaLine extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Flexible(
-              child: Container(
-                child: AutoSizeText(title!,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold)),
-              ),
               flex: 3,
+              child: AutoSizeText(title!,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(fontWeight: FontWeight.bold)),
             ),
             Flexible(
-              child: Container(
-                child:
-                    Text(amount!, style: Theme.of(context).textTheme.bodyLarge),
-              ),
               flex: 3,
+              child:
+                  Text(amount!, style: Theme.of(context).textTheme.bodyLarge),
             )
           ],
         ),
@@ -259,10 +257,10 @@ class CheckoutTotal extends StatelessWidget {
         future: CheckoutSession.getInstance
             .total(withFormat: true, taxRate: taxRate),
         child: (BuildContext context, data) => Padding(
-          child: CheckoutMetaLine(title: title, amount: data),
           padding: EdgeInsets.only(bottom: 0, top: 15),
+          child: CheckoutMetaLine(title: title, amount: data),
         ),
-        loading: SizedBox.shrink(),
+        loadingStyle: LoadingStyle.none(),
       );
 }
 
@@ -277,11 +275,11 @@ class CheckoutTaxTotal extends StatelessWidget {
         child: (BuildContext context, data) => (data == "0"
             ? Container()
             : Padding(
+                padding: EdgeInsets.only(bottom: 0, top: 0),
                 child: CheckoutMetaLine(
                   title: trans("Tax"),
                   amount: formatStringCurrency(total: data),
                 ),
-                padding: EdgeInsets.only(bottom: 0, top: 0),
               )),
       );
 }
@@ -295,12 +293,12 @@ class CheckoutSubtotal extends StatelessWidget {
   Widget build(BuildContext context) => NyFutureBuilder<String>(
         future: Cart.getInstance.getSubtotal(withFormat: true),
         child: (BuildContext context, data) => Padding(
+          padding: EdgeInsets.only(bottom: 0, top: 0),
           child: CheckoutMetaLine(
             title: title,
             amount: data,
           ),
-          padding: EdgeInsets.only(bottom: 0, top: 0),
         ),
-        loading: SizedBox.shrink(),
+        loadingStyle: LoadingStyle.none(),
       );
 }

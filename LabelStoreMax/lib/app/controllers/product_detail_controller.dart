@@ -11,7 +11,6 @@
 import 'package:flutter/material.dart';
 import '/app/models/cart.dart';
 import '/app/models/cart_line_item.dart';
-import '/bootstrap/enums/wishlist_action_enums.dart';
 import '/bootstrap/helpers.dart';
 import '/resources/widgets/cart_quantity_widget.dart';
 import '/resources/widgets/product_quantity_widget.dart';
@@ -26,14 +25,8 @@ class ProductDetailController extends Controller {
   int quantity = 1;
   Product? product;
 
-  @override
-  construct(BuildContext context) {
-    super.construct(context);
-    product = data() as Product?;
-  }
-
   viewExternalProduct() {
-    if (product!.externalUrl != null && product!.externalUrl!.isNotEmpty) {
+    if (product?.externalUrl?.isNotEmpty ?? false) {
       openBrowserTab(url: product!.externalUrl!);
     }
   }
@@ -55,13 +48,13 @@ class ProductDetailController extends Controller {
   }
 
   addQuantityTapped({Function? onSuccess}) {
-    if (product!.manageStock != null && product!.manageStock == true) {
-      if (quantity >= product!.stockQuantity!) {
+    if (product?.manageStock == true) {
+      if (quantity >= (product?.stockQuantity ?? 0)) {
         showToastNotification(context!,
             title: trans("Maximum quantity reached"),
             description:
-                "${trans("Sorry, only")} ${product!.stockQuantity} ${trans("left")}",
-            style: ToastNotificationStyleType.INFO);
+                "${trans("Sorry, only")} ${product?.stockQuantity ?? "0"} ${trans("left")}",
+            style: ToastNotificationStyleType.info);
         return;
       }
     }
@@ -84,28 +77,6 @@ class ProductDetailController extends Controller {
       updateState(ProductQuantity.state,
           data: {"product_id": product?.id, "quantity": quantity});
     }
-  }
-
-  toggleWishList(
-      {required Function onSuccess,
-      required WishlistAction wishlistAction}) async {
-    String subtitleMsg;
-    if (wishlistAction == WishlistAction.remove) {
-      await removeWishlistProduct(product: product);
-      subtitleMsg = trans("This product has been removed from your wishlist");
-    } else {
-      await saveWishlistProduct(product: product);
-      subtitleMsg = trans("This product has been added to your wishlist");
-    }
-    showStatusAlert(
-      context,
-      title: trans("Success"),
-      subtitle: subtitleMsg,
-      icon: Icons.favorite,
-      duration: 1,
-    );
-
-    onSuccess();
   }
 
   ws_product_variation.ProductVariation? findProductVariation(

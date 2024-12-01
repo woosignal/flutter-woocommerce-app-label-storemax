@@ -24,26 +24,23 @@ import '/resources/widgets/woosignal_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 import 'package:woosignal/models/response/shipping_method.dart';
 
-class CheckoutShippingTypePage extends StatefulWidget {
-  static String path = "/checkout-shipping-type";
-  CheckoutShippingTypePage();
+class CheckoutShippingTypePage extends NyStatefulWidget {
+  static RouteView path =
+      ("/checkout-shipping-type", (_) => CheckoutShippingTypePage());
 
-  @override
-  createState() => _CheckoutShippingTypePageState();
+  CheckoutShippingTypePage({super.key})
+      : super(child: () => _CheckoutShippingTypePageState());
 }
 
-class _CheckoutShippingTypePageState extends State<CheckoutShippingTypePage> {
-  _CheckoutShippingTypePageState();
-
+class _CheckoutShippingTypePageState extends NyPage<CheckoutShippingTypePage> {
   bool _isShippingSupported = true, _isLoading = true;
   final List<Map<String, dynamic>> _wsShippingOptions = [];
   WSShipping? _shipping;
 
   @override
-  void initState() {
-    super.initState();
-    _getShippingMethods();
-  }
+  get init => () {
+        _getShippingMethods();
+      };
 
   _getShippingMethods() async {
     List<WSShipping> wsShipping =
@@ -242,6 +239,7 @@ class _CheckoutShippingTypePageState extends State<CheckoutShippingTypePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
+                padding: EdgeInsets.only(top: 20),
                 child: Center(
                   child: Image.asset(
                     getImageAsset('shipping_icon.png'),
@@ -252,122 +250,117 @@ class _CheckoutShippingTypePageState extends State<CheckoutShippingTypePage> {
                     fit: BoxFit.fitHeight,
                   ),
                 ),
-                padding: EdgeInsets.only(top: 20),
               ),
-              Expanded(child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    (_isLoading
-                        ? Expanded(child: AppLoaderWidget())
-                        : (_isShippingSupported
-                        ? Expanded(
-                      child: ListView.separated(
-                        itemCount: _wsShippingOptions.length,
-                        separatorBuilder: (context, index) =>
-                            Divider(
-                              color: Colors.black12,
-                            ),
-                        itemBuilder:
-                            (BuildContext context, int index) {
-                          return ListTile(
-                            contentPadding: EdgeInsets.only(
-                              left: 16,
-                              right: 16,
-                            ),
-                            title: Text(
-                              _wsShippingOptions[index]['title'],
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            selected: true,
-                            subtitle: NyFutureBuilder<String>(
-                              future: _getShippingPrice(index),
-                              child:
-                                  (BuildContext context, data) {
-                                Map<String, dynamic>
-                                shippingOption =
-                                _wsShippingOptions[index];
-                                return RichText(
-                                  text: TextSpan(
-                                    text: '',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium,
-                                    children: <TextSpan>[
-                                      (shippingOption["object"]
-                                      is FreeShipping
-                                          ? TextSpan(
-                                        text: trans(
-                                            "Free postage"),
-                                      )
-                                          : TextSpan(
-                                        text:
-                                        "${trans("Price")}: ${formatStringCurrency(total: data)}",
-                                      )),
-                                      if (shippingOption[
-                                      "min_amount"] !=
-                                          null)
-                                        TextSpan(
-                                            text:
-                                            "\n${trans("Spend a minimum of")} ${formatStringCurrency(total: shippingOption["min_amount"])}",
-                                            style:
-                                            Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium!
-                                                .copyWith(
-                                                fontSize:
-                                                14))
-                                    ],
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: ThemeColor.get(context).backgroundContainer,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow:
+                        (Theme.of(context).brightness == Brightness.light)
+                            ? wsBoxShadow()
+                            : null,
+                  ),
+                  padding: EdgeInsets.all(8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      (_isLoading
+                          ? Expanded(child: AppLoaderWidget())
+                          : (_isShippingSupported
+                              ? Expanded(
+                                  child: ListView.separated(
+                                    itemCount: _wsShippingOptions.length,
+                                    separatorBuilder: (context, index) =>
+                                        Divider(
+                                      color: Colors.black12,
+                                    ),
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return ListTile(
+                                        contentPadding: EdgeInsets.only(
+                                          left: 16,
+                                          right: 16,
+                                        ),
+                                        title: Text(
+                                          _wsShippingOptions[index]['title'],
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                        selected: true,
+                                        subtitle: NyFutureBuilder<String>(
+                                          future: _getShippingPrice(index),
+                                          child: (BuildContext context, data) {
+                                            Map<String, dynamic>
+                                                shippingOption =
+                                                _wsShippingOptions[index];
+                                            return RichText(
+                                              text: TextSpan(
+                                                text: '',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium,
+                                                children: <TextSpan>[
+                                                  (shippingOption["object"]
+                                                          is FreeShipping
+                                                      ? TextSpan(
+                                                          text: trans(
+                                                              "Free postage"),
+                                                        )
+                                                      : TextSpan(
+                                                          text:
+                                                              "${trans("Price")}: ${formatStringCurrency(total: data)}",
+                                                        )),
+                                                  if (shippingOption[
+                                                          "min_amount"] !=
+                                                      null)
+                                                    TextSpan(
+                                                        text:
+                                                            "\n${trans("Spend a minimum of")} ${formatStringCurrency(total: shippingOption["min_amount"])}",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyMedium!
+                                                            .copyWith(
+                                                                fontSize: 14))
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        trailing: (CheckoutSession.getInstance
+                                                        .shippingType !=
+                                                    null &&
+                                                CheckoutSession.getInstance
+                                                        .shippingType!.object ==
+                                                    _wsShippingOptions[index]
+                                                        ["object"]
+                                            ? Icon(Icons.check)
+                                            : null),
+                                        onTap: () =>
+                                            _handleCheckoutTapped(index),
+                                      );
+                                    },
                                   ),
-                                );
-                              },
-                            ),
-                            trailing: (CheckoutSession.getInstance
-                                .shippingType !=
-                                null &&
-                                CheckoutSession
-                                    .getInstance
-                                    .shippingType!
-                                    .object ==
-                                    _wsShippingOptions[index]
-                                    ["object"]
-                                ? Icon(Icons.check)
-                                : null),
-                            onTap: () =>
-                                _handleCheckoutTapped(index),
-                          );
-                        },
+                                )
+                              : Text(
+                                  trans(
+                                      "Shipping is not supported for your location, sorry"),
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                  textAlign: TextAlign.center,
+                                ))),
+                      LinkButton(
+                        title: trans("CANCEL"),
+                        action: () => Navigator.pop(context),
                       ),
-                    )
-                        : Text(
-                      trans(
-                          "Shipping is not supported for your location, sorry"),
-                      style:
-                      Theme.of(context).textTheme.titleLarge,
-                      textAlign: TextAlign.center,
-                    ))),
-                    LinkButton(
-                      title: trans("CANCEL"),
-                      action: () => Navigator.pop(context),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                decoration: BoxDecoration(
-                  color: ThemeColor.get(context).backgroundContainer,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow:
-                  (Theme.of(context).brightness == Brightness.light)
-                      ? wsBoxShadow()
-                      : null,
-                ),
-                padding: EdgeInsets.all(8),
-              ),),
+              ),
             ],
           ),
         ),
@@ -389,6 +382,6 @@ class _CheckoutShippingTypePageState extends State<CheckoutShippingTypePage> {
 
     CheckoutSession.getInstance.shippingType = shippingType;
 
-    Navigator.pop(context);
+    pop();
   }
 }

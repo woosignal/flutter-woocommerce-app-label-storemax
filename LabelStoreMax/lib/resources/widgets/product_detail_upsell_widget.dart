@@ -16,8 +16,8 @@ import 'package:nylo_framework/nylo_framework.dart';
 import 'package:woosignal/models/response/woosignal_app.dart';
 
 class ProductDetailUpsellWidget extends StatefulWidget {
-  ProductDetailUpsellWidget(
-      {required this.productIds, required this.wooSignalApp});
+  const ProductDetailUpsellWidget(
+      {super.key, required this.productIds, required this.wooSignalApp});
   final List<int>? productIds;
   final WooSignalApp? wooSignalApp;
 
@@ -28,12 +28,9 @@ class ProductDetailUpsellWidget extends StatefulWidget {
 class _ProductDetailUpsellWidgetState
     extends NyState<ProductDetailUpsellWidget> {
   @override
-  boot() async {}
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget.productIds!.isEmpty ||
-        widget.wooSignalApp!.showUpsellProducts == false) {
+  Widget view(BuildContext context) {
+    if ((widget.productIds?.isEmpty ?? false) ||
+        widget.wooSignalApp?.showUpsellProducts == false) {
       return SizedBox.shrink();
     }
 
@@ -59,17 +56,20 @@ class _ProductDetailUpsellWidgetState
             ],
           ),
         ),
-        Container(
+        SizedBox(
             height: 300,
             child: NyListView(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 child: (context, product) {
-                  return Container(
+                  return SizedBox(
                     width: MediaQuery.of(context).size.width / 2.2,
-                    child: ProductItemContainer(product: product, onTap: () {
-                      routeTo(ProductDetailPage.path, data: product);
-                    },),
+                    child: ProductItemContainer(
+                      product: product,
+                      onTap: () {
+                        routeTo(ProductDetailPage.path, data: product);
+                      },
+                    ),
                   );
                 },
                 data: () {

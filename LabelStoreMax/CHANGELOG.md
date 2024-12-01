@@ -1,3 +1,8 @@
+## [8.0.0] - 2024-12-01
+
+* Update project for Nylo 6.x
+* Pubspec.yaml dependency updates
+
 ## [7.5.7] - 2024-07-31
 
 * Update order_wc.dart class

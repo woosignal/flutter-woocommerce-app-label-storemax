@@ -14,7 +14,7 @@ class LightThemeColors implements ColorStyles {
   @override
   Color get backgroundContainer => Colors.white;
   @override
-  Color get primaryContent => Color(int.parse(
+  Color get content => Color(int.parse(
       AppHelper.instance.appConfig!.themeColors!['light']['primary_text']));
   @override
   Color get primaryAccent => const Color(0xFF87c694);
@@ -38,12 +38,19 @@ class LightThemeColors implements ColorStyles {
 
   // buttons
   @override
+  Color get buttonContent => Color(int.parse(
+      AppHelper.instance.appConfig!.themeColors!['light']['button_text']));
+
+  @override
+  Color get buttonSecondaryBackground => Colors.black;
+
+  @override
+  Color get buttonSecondaryContent => Colors.white;
+
+  @override
   Color get buttonBackground =>
       Color(int.parse(AppHelper.instance.appConfig!.themeColors!['light']
           ['button_background']));
-  @override
-  Color get buttonPrimaryContent => Color(int.parse(
-      AppHelper.instance.appConfig!.themeColors!['light']['button_text']));
 
   // bottom tab bar
   @override

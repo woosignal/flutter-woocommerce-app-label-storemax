@@ -18,23 +18,22 @@ import '/resources/widgets/safearea_widget.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 import 'package:woosignal/models/response/coupon.dart';
 
-class CouponPage extends StatefulWidget {
-  static String path = "/checkout-coupons";
-  @override
-  createState() => _CouponPageState();
+class CouponPage extends NyStatefulWidget {
+  static RouteView path = ("/checkout-coupons", (_) => CouponPage());
+
+  CouponPage({super.key}) : super(child: () => _CouponPageState());
 }
 
-class _CouponPageState extends NyState<CouponPage> {
+class _CouponPageState extends NyPage<CouponPage> {
   List<Coupon> _coupons = [];
 
   final couponController = TextEditingController();
 
   _showAlert({required String message, ToastNotificationStyleType? style}) {
-    showToastNotification(
-      context,
+    showToast(
       title: trans('Coupon'),
       description: message,
-      style: style ?? ToastNotificationStyleType.SUCCESS,
+      style: style ?? ToastNotificationStyleType.success,
       icon: Icons.call_to_action,
     );
   }
@@ -55,7 +54,7 @@ class _CouponPageState extends NyState<CouponPage> {
   final _formKey = GlobalKey<FormState>();
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     CheckoutSession checkoutSession = CheckoutSession.getInstance;
     return Scaffold(
       body: SafeAreaWidget(
@@ -132,7 +131,7 @@ class _CouponPageState extends NyState<CouponPage> {
       if (_coupons.isEmpty) {
         _showAlert(
             message: "${trans('Coupon not found')}.",
-            style: ToastNotificationStyleType.WARNING);
+            style: ToastNotificationStyleType.warning);
         return;
       }
 
@@ -148,7 +147,7 @@ class _CouponPageState extends NyState<CouponPage> {
           _showAlert(
               message:
                   "${trans('Sorry, this coupon can not be used with your cart')}.",
-              style: ToastNotificationStyleType.INFO);
+              style: ToastNotificationStyleType.info);
           return;
         }
       }
@@ -159,7 +158,7 @@ class _CouponPageState extends NyState<CouponPage> {
       if (coupon.emailRestrictions!.contains(emailAddress)) {
         _showAlert(
             message: trans('You cannot redeem this coupon'),
-            style: ToastNotificationStyleType.DANGER);
+            style: ToastNotificationStyleType.danger);
         return;
       }
 
@@ -174,7 +173,7 @@ class _CouponPageState extends NyState<CouponPage> {
                   "minimumAmount":
                       formatStringCurrency(total: minimumAmount.toString())
                 }),
-            style: ToastNotificationStyleType.DANGER);
+            style: ToastNotificationStyleType.danger);
         return;
       }
 
@@ -187,7 +186,7 @@ class _CouponPageState extends NyState<CouponPage> {
                   "maximumAmount":
                       formatStringCurrency(total: maximumAmount.toString())
                 }),
-            style: ToastNotificationStyleType.DANGER);
+            style: ToastNotificationStyleType.danger);
         return;
       }
 
@@ -198,7 +197,7 @@ class _CouponPageState extends NyState<CouponPage> {
           )) {
         _showAlert(
             message: trans("This coupon has expired"),
-            style: ToastNotificationStyleType.WARNING);
+            style: ToastNotificationStyleType.warning);
         return;
       }
 
@@ -207,7 +206,7 @@ class _CouponPageState extends NyState<CouponPage> {
           coupon.usageCount! >= coupon.usageLimit!) {
         _showAlert(
             message: trans("Usage limit has been reached"),
-            style: ToastNotificationStyleType.WARNING);
+            style: ToastNotificationStyleType.warning);
         return;
       }
 
@@ -221,7 +220,7 @@ class _CouponPageState extends NyState<CouponPage> {
               limitPerUser) {
         _showAlert(
             message: "${trans('You cannot redeem this coupon')}.",
-            style: ToastNotificationStyleType.WARNING);
+            style: ToastNotificationStyleType.warning);
         return;
       }
 

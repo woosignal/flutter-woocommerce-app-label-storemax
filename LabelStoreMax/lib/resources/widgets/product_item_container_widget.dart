@@ -23,13 +23,14 @@ class ProductItemContainer extends StatelessWidget {
 
     double height = 280;
     return InkWell(
+      onTap: onTap,
       child: Container(
         margin: EdgeInsets.all(4),
         child: ListView(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
-            Container(
+            SizedBox(
               height: 180,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(3.0),
@@ -41,8 +42,8 @@ class ProductItemContainer extends StatelessWidget {
                       width: double.infinity,
                     ),
                     CachedImageWidget(
-                      image: (product!.images.isNotEmpty
-                          ? product!.images.first.src
+                      image: (product?.images.isNotEmpty ?? false
+                          ? product?.images.first.src
                           : getEnv("PRODUCT_PLACEHOLDER_IMAGE")),
                       fit: BoxFit.contain,
                       height: height,
@@ -51,13 +52,14 @@ class ProductItemContainer extends StatelessWidget {
                     if (isProductNew(product))
                       Container(
                         padding: EdgeInsets.all(4),
+                        decoration: BoxDecoration(color: Colors.black),
                         child: Text(
                           "New",
                           style: TextStyle(color: Colors.white),
                         ),
-                        decoration: BoxDecoration(color: Colors.black),
                       ),
-                    if (product!.onSale! && product!.type != "variable")
+                    if ((product?.onSale ?? false) &&
+                        product?.type != "variable")
                       Positioned(
                         bottom: 0,
                         left: 0,
@@ -75,14 +77,14 @@ class ProductItemContainer extends StatelessWidget {
                               children: <TextSpan>[
                                 TextSpan(
                                   text:
-                                  "${workoutSaleDiscount(salePrice: product!.salePrice, priceBefore: product!.regularPrice)}% ${trans("off")}",
+                                      "${workoutSaleDiscount(salePrice: product?.salePrice, priceBefore: product!.regularPrice)}% ${trans("off")}",
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyLarge!
                                       .copyWith(
-                                    color: Colors.black,
-                                    fontSize: 13,
-                                  ),
+                                        color: Colors.black,
+                                        fontSize: 13,
+                                      ),
                                 ),
                               ],
                             ),
@@ -125,20 +127,20 @@ class ProductItemContainer extends StatelessWidget {
                         TextSpan(
                           text: '${trans("Was")}: ',
                           style:
-                          Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            fontSize: 11,
-                          ),
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    fontSize: 11,
+                                  ),
                         ),
                         TextSpan(
                           text: formatStringCurrency(
                             total: product?.regularPrice,
                           ),
                           style:
-                          Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            decoration: TextDecoration.lineThrough,
-                            color: Colors.grey,
-                            fontSize: 11,
-                          ),
+                              Theme.of(context).textTheme.bodyLarge!.copyWith(
+                                    decoration: TextDecoration.lineThrough,
+                                    color: Colors.grey,
+                                    fontSize: 11,
+                                  ),
                         ),
                       ]),
                     ),
@@ -148,7 +150,6 @@ class ProductItemContainer extends StatelessWidget {
           ],
         ),
       ),
-      onTap: onTap,
     );
   }
 }

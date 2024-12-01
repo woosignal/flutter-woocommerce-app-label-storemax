@@ -28,17 +28,14 @@ import 'package:wp_json_api/models/responses/wp_user_info_response.dart';
 import 'package:wp_json_api/wp_json_api.dart';
 import '../../app/models/default_shipping.dart';
 
-class CheckoutDetailsPage extends StatefulWidget {
-  static String path = "/checkout-details";
-  CheckoutDetailsPage();
+class CheckoutDetailsPage extends NyStatefulWidget {
+  static RouteView path = ("/checkout-details", (_) => CheckoutDetailsPage());
 
-  @override
-  createState() => _CheckoutDetailsPageState();
+  CheckoutDetailsPage({super.key})
+      : super(child: () => _CheckoutDetailsPageState());
 }
 
-class _CheckoutDetailsPageState extends NyState<CheckoutDetailsPage> {
-  _CheckoutDetailsPageState();
-
+class _CheckoutDetailsPageState extends NyPage<CheckoutDetailsPage> {
   bool? _hasDifferentShippingAddress = false,
       valRememberDetails = true,
       _wpLoginEnabled;
@@ -90,39 +87,42 @@ class _CheckoutDetailsPageState extends NyState<CheckoutDetailsPage> {
       );
 
   @override
-  void init() async {
-    super.init();
+  get init => () async {
+        super.init();
 
-    _wpLoginEnabled = AppHelper.instance.appConfig?.wpLoginEnabled == 1;
+        _wpLoginEnabled = AppHelper.instance.appConfig?.wpLoginEnabled == 1;
 
-    if (_wpLoginEnabled == true && (await WPJsonAPI.wpUserLoggedIn())) {
-      await awaitData(perform: () async {
-        await _fetchUserDetails();
-      });
-      return;
-    }
+        if (_wpLoginEnabled == true && (await WPJsonAPI.wpUserLoggedIn())) {
+          await awaitData(perform: () async {
+            await _fetchUserDetails();
+          });
+          return;
+        }
 
-    if (CheckoutSession.getInstance.billingDetails!.billingAddress == null) {
-      CheckoutSession.getInstance.billingDetails!.initSession();
-      CheckoutSession.getInstance.billingDetails!.shippingAddress!
-          .initAddress();
-      CheckoutSession.getInstance.billingDetails!.billingAddress?.initAddress();
-    }
-    BillingDetails billingDetails = CheckoutSession.getInstance.billingDetails!;
-    _setFieldsFromCustomerAddress(billingDetails.billingAddress,
-        type: "billing");
-    _setFieldsFromCustomerAddress(billingDetails.shippingAddress,
-        type: "shipping");
+        if (CheckoutSession.getInstance.billingDetails!.billingAddress ==
+            null) {
+          CheckoutSession.getInstance.billingDetails!.initSession();
+          CheckoutSession.getInstance.billingDetails!.shippingAddress!
+              .initAddress();
+          CheckoutSession.getInstance.billingDetails!.billingAddress
+              ?.initAddress();
+        }
+        BillingDetails billingDetails =
+            CheckoutSession.getInstance.billingDetails!;
+        _setFieldsFromCustomerAddress(billingDetails.billingAddress,
+            type: "billing");
+        _setFieldsFromCustomerAddress(billingDetails.shippingAddress,
+            type: "shipping");
 
-    _hasDifferentShippingAddress =
-        CheckoutSession.getInstance.shipToDifferentAddress;
-    valRememberDetails = billingDetails.rememberDetails ?? true;
-    if (valRememberDetails == true) {
-      await _setCustomersDetailsFromRemember();
-      return;
-    }
-    setState(() {});
-  }
+        _hasDifferentShippingAddress =
+            CheckoutSession.getInstance.shipToDifferentAddress;
+        valRememberDetails = billingDetails.rememberDetails ?? true;
+        if (valRememberDetails == true) {
+          await _setCustomersDetailsFromRemember();
+          return;
+        }
+        setState(() {});
+      };
 
   _setCustomersDetailsFromRemember() async {
     CustomerAddress? sfCustomerBillingAddress =
@@ -185,7 +185,7 @@ class _CheckoutDetailsPageState extends NyState<CheckoutDetailsPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -211,12 +211,14 @@ class _CheckoutDetailsPageState extends NyState<CheckoutDetailsPage> {
                           if (_hasDifferentShippingAddress!)
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 0),
+                              height: 60,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: <Widget>[
                                   Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 4),
                                     child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
@@ -243,11 +245,9 @@ class _CheckoutDetailsPageState extends NyState<CheckoutDetailsPage> {
                                                 })),
                                       ],
                                     ),
-                                    padding: EdgeInsets.symmetric(vertical: 4),
                                   ),
                                 ],
                               ),
-                              height: 60,
                             ),
                           Expanded(
                             child: Container(
@@ -268,7 +268,7 @@ class _CheckoutDetailsPageState extends NyState<CheckoutDetailsPage> {
                         ],
                       ),
                     ),
-                    Container(
+                    SizedBox(
                       height: 160,
                       child: Column(
                         children: <Widget>[
@@ -349,12 +349,11 @@ class _CheckoutDetailsPageState extends NyState<CheckoutDetailsPage> {
             customerCountry: _shippingCountry);
 
         if (customerShippingAddress.hasMissingFields()) {
-          showToastNotification(
-            context,
+          showToast(
             title: trans("Oops"),
             description: trans(
                 "Invalid shipping address, please check your shipping details"),
-            style: ToastNotificationStyleType.WARNING,
+            style: ToastNotificationStyleType.warning,
           );
           return;
         }
@@ -371,21 +370,19 @@ class _CheckoutDetailsPageState extends NyState<CheckoutDetailsPage> {
       String shippingEmail = billingDetails.shippingAddress!.emailAddress!;
       // Billing email is required for Stripe
       if (billingEmail.isEmpty || !validate.isEmail(billingEmail)) {
-        showToastNotification(
-          context,
+        showToast(
           title: trans("Oops"),
           description: trans("Please enter a valid billing email"),
-          style: ToastNotificationStyleType.WARNING,
+          style: ToastNotificationStyleType.warning,
         );
         return;
       }
 
       if (shippingEmail.isNotEmpty && !validate.isEmail(shippingEmail)) {
-        showToastNotification(
-          context,
+        showToast(
           title: trans("Oops"),
           description: trans("Please enter a valid shipping email"),
-          style: ToastNotificationStyleType.WARNING,
+          style: ToastNotificationStyleType.warning,
         );
         return;
       }
@@ -401,10 +398,11 @@ class _CheckoutDetailsPageState extends NyState<CheckoutDetailsPage> {
             ]),
           );
         } on Exception catch (e) {
-          showToastNotification(context,
+          showToast(
               title: trans("Oops!"),
               description: trans("Something went wrong"),
-              style: ToastNotificationStyleType.DANGER);
+              icon: Icons.info_outline,
+              style: ToastNotificationStyleType.danger);
           if (getEnv('APP_DEBUG', defaultValue: true) == true) {
             NyLogger.error(e.toString());
           }
@@ -425,7 +423,7 @@ class _CheckoutDetailsPageState extends NyState<CheckoutDetailsPage> {
           _hasDifferentShippingAddress;
 
       CheckoutSession.getInstance.shippingType = null;
-      Navigator.pop(context);
+      pop();
     });
   }
 
@@ -498,14 +496,14 @@ class _CheckoutDetailsPageState extends NyState<CheckoutDetailsPage> {
         wpUserInfoResponse =
             await WPJsonAPI.instance.api((request) => request.wpGetUserInfo());
       } on Exception catch (e) {
-        print(e.toString());
-        showToastNotification(
-          context,
-          title: trans("Oops!"),
-          description: trans("Something went wrong"),
-          style: ToastNotificationStyleType.DANGER,
-        );
-        Navigator.pop(context);
+        printError(e.toString());
+        showToast(
+            title: trans("Oops!"),
+            description: trans("Something went wrong"),
+            icon: Icons.info_outline,
+            style: ToastNotificationStyleType.danger);
+        pop();
+        return;
       }
 
       if (wpUserInfoResponse != null && wpUserInfoResponse.status == 200) {

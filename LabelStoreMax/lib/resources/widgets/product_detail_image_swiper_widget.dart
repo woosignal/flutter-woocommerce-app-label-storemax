@@ -28,11 +28,13 @@ class ProductDetailImageSwiperWidget extends StatelessWidget {
       child: SizedBox(
         child: Swiper(
           itemBuilder: (BuildContext context, int index) => CachedImageWidget(
-            image: product!.images.isNotEmpty
-                ? product!.images[index].src
+            image: product?.images.isNotEmpty ?? false
+                ? product?.images[index].src
                 : getEnv("PRODUCT_PLACEHOLDER_IMAGE"),
           ),
-          itemCount: product!.images.isEmpty ? 1 : product!.images.length,
+          itemCount: (product?.images.isEmpty ?? false)
+              ? 1
+              : product?.images.length ?? 1,
           viewportFraction: 0.85,
           scale: 0.9,
           onTap: onTapImage,

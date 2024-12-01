@@ -44,6 +44,8 @@ class CustomerAddressInput extends StatelessWidget {
       shrinkWrap: true,
       children: <Widget>[
         Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Flexible(
               child: TextEditingRow(
@@ -59,8 +61,6 @@ class CustomerAddressInput extends StatelessWidget {
               ),
             ),
           ],
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         ),
         Row(
           children: <Widget>[
@@ -110,28 +110,30 @@ class CustomerAddressInput extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               if (customerCountry?.hasState() ?? false)
                 Flexible(
                   child: Column(
                     children: [
-                      Container(
+                      SizedBox(
                         height: 23,
+                        width: double.infinity,
                         child: Text(
                           trans("State"),
                           style: Theme.of(context).textTheme.bodyLarge,
                           textAlign: TextAlign.left,
                         ),
-                        width: double.infinity,
                       ),
                       Padding(
+                        padding: EdgeInsets.all(8),
                         child: SecondaryButton(
                           title: (customerCountry!.state != null
                               ? (customerCountry?.state?.name ?? "")
                               : trans("Select state")),
                           action: onTapCountry,
                         ),
-                        padding: EdgeInsets.all(8),
                       ),
                     ],
                   ),
@@ -139,16 +141,17 @@ class CustomerAddressInput extends StatelessWidget {
               Flexible(
                 child: Column(
                   children: [
-                    Container(
+                    SizedBox(
                       height: 23,
+                      width: double.infinity,
                       child: Text(
                         trans("Country"),
                         style: Theme.of(context).textTheme.bodyLarge,
                         textAlign: TextAlign.left,
                       ),
-                      width: double.infinity,
                     ),
                     Padding(
+                      padding: EdgeInsets.all(8),
                       child: SecondaryButton(
                         title: (customerCountry != null &&
                                 (customerCountry?.name ?? "").isNotEmpty
@@ -156,14 +159,11 @@ class CustomerAddressInput extends StatelessWidget {
                             : trans("Select country")),
                         action: onTapCountry,
                       ),
-                      padding: EdgeInsets.all(8),
                     ),
                   ],
                 ),
               ),
             ],
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           ),
         ),
       ],

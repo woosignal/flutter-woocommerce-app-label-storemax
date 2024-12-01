@@ -18,22 +18,21 @@ import 'package:nylo_framework/nylo_framework.dart';
 import 'package:woosignal/models/response/product.dart' as ws_product;
 
 class BrowseSearchPage extends NyStatefulWidget {
-  static String path = "/product-search";
+  static RouteView path = ("/product-search", (_) => BrowseSearchPage());
 
-  BrowseSearchPage({Key? key})
-      : super(path, key: key, child: _BrowseSearchState());
+  BrowseSearchPage({super.key}) : super(child: () => _BrowseSearchState());
 }
 
-class _BrowseSearchState extends NyState<BrowseSearchPage> {
+class _BrowseSearchState extends NyPage<BrowseSearchPage> {
   String? _search;
 
   @override
-  init() async {
-    _search = widget.controller.data();
-  }
+  get init => () {
+        _search = widget.controller.data();
+      };
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Column(
@@ -52,7 +51,7 @@ class _BrowseSearchState extends NyState<BrowseSearchPage> {
       body: SafeAreaWidget(
           child: NyPullToRefresh.grid(child: (context, product) {
         product as ws_product.Product;
-        return Container(
+        return SizedBox(
           height: 300,
           child: ProductItemContainer(
             product: product,

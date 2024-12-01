@@ -28,11 +28,11 @@ class CheckoutCouponAmountWidget extends StatelessWidget {
     return NyFutureBuilder<String>(
       future: Cart.getInstance.couponDiscountAmount(),
       child: (BuildContext context, data) => Padding(
+        padding: EdgeInsets.only(bottom: 0, top: 0),
         child: CheckoutMetaLine(
           title: "${trans('Coupon')}: ${checkoutSession.coupon?.code}",
           amount: "-${formatStringCurrency(total: data)}",
         ),
-        padding: EdgeInsets.only(bottom: 0, top: 0),
       ),
     );
   }

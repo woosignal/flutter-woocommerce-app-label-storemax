@@ -11,6 +11,7 @@
 import 'dart:convert';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:wp_json_api/models/wp_user.dart';
 import 'package:wp_json_api/wp_json_api.dart';
 import '/app/models/billing_details.dart';
@@ -28,7 +29,6 @@ import '/config/payment_gateways.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
-import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:nylo_framework/nylo_framework.dart';
@@ -59,7 +59,7 @@ class ThemeColor {
 /// helper to set colors on TextStyle
 extension ColorsHelper on TextStyle {
   TextStyle setColor(
-      BuildContext context, Color Function(BaseColorStyles? color) newColor) {
+      BuildContext context, Color Function(ColorStyles? color) newColor) {
     return copyWith(color: newColor(ThemeColor.get(context)));
   }
 }
@@ -164,13 +164,11 @@ String workoutSaleDiscount(
 }
 
 openBrowserTab({required String url}) async {
-  await FlutterWebBrowser.openWebPage(
-    url: url,
-    customTabsOptions: CustomTabsOptions(
-      defaultColorSchemeParams:
-          CustomTabsColorSchemeParams(toolbarColor: Colors.white70),
-    ),
-  );
+  try {
+    await InAppBrowser.openWithSystemBrowser(url: WebUri(url));
+  } catch (e) {
+    printError('Error opening InAppWebView: $e');
+  }
 }
 
 bool isNumeric(String? str) {
@@ -423,7 +421,7 @@ class UserAuth {
 
 Future<List<DefaultShipping>> getDefaultShipping() async {
   String data =
-      await rootBundle.loadString('public/assets/json/default_shipping.json');
+      await rootBundle.loadString('public/json/default_shipping.json');
   dynamic dataJson = json.decode(data);
   List<DefaultShipping> shipping = [];
 
@@ -496,7 +494,7 @@ Future<List<dynamic>> getWishlistProducts() async {
   return favouriteProducts;
 }
 
-hasAddedWishlistProduct(int? productId) async {
+Future<bool> hasAddedWishlistProduct(int? productId) async {
   List<dynamic> favouriteProducts = await getWishlistProducts();
   List<int> productIds =
       favouriteProducts.map((e) => e['id']).cast<int>().toList();
@@ -508,20 +506,20 @@ hasAddedWishlistProduct(int? productId) async {
 
 saveWishlistProduct({required Product? product}) async {
   List<dynamic> products = await getWishlistProducts();
-  if (products.any((wishListProduct) => wishListProduct['id'] == product!.id) ==
+  if (products.any((wishListProduct) => wishListProduct['id'] == product?.id) ==
       false) {
     products.add({"id": product!.id});
   }
   String json = jsonEncode(products.map((i) => {"id": i['id']}).toList());
-  await NyStorage.store(SharedKey.wishlistProducts, json);
+  await NyStorage.save(SharedKey.wishlistProducts, json);
 }
 
 removeWishlistProduct({required Product? product}) async {
   List<dynamic> products = await getWishlistProducts();
-  products.removeWhere((element) => element['id'] == product!.id);
+  products.removeWhere((element) => element['id'] == product?.id);
 
   String json = jsonEncode(products.map((i) => {"id": i['id']}).toList());
-  await NyStorage.store(SharedKey.wishlistProducts, json);
+  await NyStorage.save(SharedKey.wishlistProducts, json);
 }
 
 Future<BillingDetails> billingDetailsFromWpUserInfoResponse(
@@ -674,7 +672,7 @@ class NyNotification {
   /// Get all notifications
   static Future<List<NotificationItem>> allNotifications() async {
     List<NotificationItem> notifications =
-        await NyStorage.readCollection<NotificationItem>("app_notifications",
+        await NyStorage.readCollection<NotificationItem>(storageKey(),
             modelDecoders: {
           NotificationItem: (data) => NotificationItem.fromJson(data),
         });
@@ -734,7 +732,7 @@ class NyNotification {
           }
           return child(data);
         },
-        loading: loading);
+        loadingStyle: LoadingStyle.normal(child: loading));
   }
 
   /// Render list of notifications
@@ -754,7 +752,7 @@ class NyNotification {
             return data.reversed.toList();
           });
         },
-        loading: loading);
+        loadingStyle: LoadingStyle.normal(child: loading));
   }
 
   /// Render list of notifications
@@ -782,7 +780,7 @@ class NyNotification {
             },
           );
         },
-        loading: loading);
+        loadingStyle: LoadingStyle.normal(child: loading));
   }
 }
 

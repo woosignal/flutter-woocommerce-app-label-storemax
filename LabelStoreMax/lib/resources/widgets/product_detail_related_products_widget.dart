@@ -24,11 +24,12 @@ class ProductDetailRelatedProductsWidget extends StatefulWidget {
   final WooSignalApp? wooSignalApp;
 
   @override
-  State<ProductDetailRelatedProductsWidget> createState() => _ProductDetailRelatedProductsWidgetState();
+  State<ProductDetailRelatedProductsWidget> createState() =>
+      _ProductDetailRelatedProductsWidgetState();
 }
 
-class _ProductDetailRelatedProductsWidgetState extends State<ProductDetailRelatedProductsWidget> {
-
+class _ProductDetailRelatedProductsWidgetState
+    extends State<ProductDetailRelatedProductsWidget> {
   bool hasRelatedProducts = true;
 
   @override
@@ -63,7 +64,7 @@ class _ProductDetailRelatedProductsWidgetState extends State<ProductDetailRelate
             ],
           ),
         ),
-        Container(
+        SizedBox(
           height: 300,
           child: NyFutureBuilder<List<Product>>(
             future: fetchRelated(),
@@ -77,14 +78,17 @@ class _ProductDetailRelatedProductsWidgetState extends State<ProductDetailRelate
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 children: relatedProducts
-                    .map((product) => Container(
+                    .map(
+                      (product) => SizedBox(
                         width: MediaQuery.of(context).size.width / 2.2,
                         child: ProductItemContainer(
                           product: product,
                           onTap: () {
                             routeTo(ProductDetailPage.path, data: product);
                           },
-                        ),),)
+                        ),
+                      ),
+                    )
                     .toList(),
               );
             },
@@ -95,13 +99,12 @@ class _ProductDetailRelatedProductsWidgetState extends State<ProductDetailRelate
   }
 
   Future<List<Product>> fetchRelated() async {
-    List<Product> products =  await appWooSignal(
-          (api) =>
-          api.getProducts(
-              perPage: 25,
-              include: widget.product?.relatedIds,
-              stockStatus: "instock",
-              status: "publish"),
+    List<Product> products = await appWooSignal(
+      (api) => api.getProducts(
+          perPage: 25,
+          include: widget.product?.relatedIds,
+          stockStatus: "instock",
+          status: "publish"),
     );
 
     if (products.isEmpty) {

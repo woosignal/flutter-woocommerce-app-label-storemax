@@ -17,32 +17,33 @@ import 'package:nylo_framework/nylo_framework.dart';
 import 'package:woosignal/models/response/order.dart';
 
 class AccountOrderDetailPage extends NyStatefulWidget {
-  static String path = "/account-order-detail";
+  static RouteView path =
+      ("/account-order-detail", (_) => AccountOrderDetailPage());
 
-  AccountOrderDetailPage({Key? key})
-      : super(path, key: key, child: _AccountOrderDetailPageState());
+  AccountOrderDetailPage({super.key})
+      : super(child: () => _AccountOrderDetailPageState());
 }
 
-class _AccountOrderDetailPageState extends NyState<AccountOrderDetailPage> {
+class _AccountOrderDetailPageState extends NyPage<AccountOrderDetailPage> {
   int? _orderId;
   Order? _order;
 
   @override
-  boot() async {
-    _orderId = widget.controller.data();
-    await _fetchOrder();
-  }
+  get init => () async {
+        _orderId = widget.controller.data();
+        await _fetchOrder();
+      };
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: Container(
+          margin: EdgeInsets.only(left: 0),
           child: IconButton(
             icon: Icon(Icons.arrow_back_ios),
             onPressed: () => Navigator.pop(context),
           ),
-          margin: EdgeInsets.only(left: 0),
         ),
         title: afterNotNull(_orderId,
             child: () =>
@@ -98,6 +99,15 @@ class _AccountOrderDetailPageState extends NyState<AccountOrderDetailPage> {
               Container(
                 margin: EdgeInsets.only(top: 10, bottom: 10),
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: (Theme.of(context).brightness == Brightness.light)
+                      ? wsBoxShadow()
+                      : null,
+                  color: (Theme.of(context).brightness == Brightness.light)
+                      ? Colors.white
+                      : Color(0xFF2C2C2C),
+                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -126,15 +136,6 @@ class _AccountOrderDetailPageState extends NyState<AccountOrderDetailPage> {
                       ),
                     ),
                   ],
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: (Theme.of(context).brightness == Brightness.light)
-                      ? wsBoxShadow()
-                      : null,
-                  color: (Theme.of(context).brightness == Brightness.light)
-                      ? Colors.white
-                      : Color(0xFF2C2C2C),
                 ),
               ),
               Expanded(

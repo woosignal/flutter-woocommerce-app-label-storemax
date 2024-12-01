@@ -46,13 +46,13 @@ class TopNavWidget extends StatelessWidget {
             child: MaterialButton(
               minWidth: 100,
               height: 60,
+              onPressed: onPressBrowseCategories,
               child: AutoSizeText(
                 trans("Browse categories"),
                 style: Theme.of(context).textTheme.bodyLarge,
                 maxLines: 1,
                 textAlign: TextAlign.right,
               ),
-              onPressed: onPressBrowseCategories,
             ),
           )
         ],

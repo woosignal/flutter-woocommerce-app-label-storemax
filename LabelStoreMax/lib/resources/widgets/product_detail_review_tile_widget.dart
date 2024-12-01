@@ -15,7 +15,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 import 'package:woosignal/models/response/product_review.dart';
 
 class ProductDetailReviewTileWidget extends StatefulWidget {
-  ProductDetailReviewTileWidget({Key? key, required this.productReview});
+  const ProductDetailReviewTileWidget({super.key, required this.productReview});
   final ProductReview productReview;
 
   @override
@@ -30,6 +30,10 @@ class _ProductDetailReviewTileWidgetState
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 5, left: 16, right: 16),
+      decoration: BoxDecoration(
+          border: Border(
+        bottom: BorderSide(color: Colors.black12, width: 1),
+      )),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -80,10 +84,6 @@ class _ProductDetailReviewTileWidgetState
             )
         ],
       ),
-      decoration: BoxDecoration(
-          border: Border(
-        bottom: BorderSide(color: Colors.black12, width: 1),
-      )),
     );
   }
 }

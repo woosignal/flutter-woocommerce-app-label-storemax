@@ -9,7 +9,7 @@
 //  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/resources/widgets/store_logo_widget.dart';
+import '/resources/widgets/store_logo_widget.dart';
 
 class CheckoutStoreHeadingWidget extends StatelessWidget {
   const CheckoutStoreHeadingWidget({super.key});
@@ -23,8 +23,8 @@ class CheckoutStoreHeadingWidget extends StatelessWidget {
       padding: EdgeInsets.all(2),
       margin: EdgeInsets.only(top: 16),
       child: ClipRRect(
-        child: StoreLogo(height: 65),
         borderRadius: BorderRadius.circular(8),
+        child: StoreLogo(height: 65),
       ),
     );
   }

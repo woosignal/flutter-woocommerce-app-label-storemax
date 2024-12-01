@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import '/config/storage_keys.dart';
 import '/bootstrap/app_helper.dart';
 import '/bootstrap/helpers.dart';
 import '/config/decoders.dart';
@@ -19,10 +20,10 @@ class AppProvider implements NyProvider {
     ]);
 
     await WooSignal.instance.init(
-        appKey: getEnv('APP_KEY'),
-        debugMode: getEnv('APP_DEBUG'),
-        encryptKey: getEnv('ENCRYPT_KEY', defaultValue: null),
-        encryptSecret: getEnv('ENCRYPT_SECRET', defaultValue: null),
+      appKey: getEnv('APP_KEY'),
+      debugMode: getEnv('APP_DEBUG'),
+      encryptKey: getEnv('ENCRYPT_KEY', defaultValue: null),
+      encryptSecret: getEnv('ENCRYPT_SECRET', defaultValue: null),
     );
 
     AppHelper.instance.appConfig = WooSignalApp();
@@ -68,10 +69,10 @@ class AppProvider implements NyProvider {
         }
 
         WPJsonAPI.instance.init(
-          baseUrl: wooSignalApp.wpLoginBaseUrl ?? "",
-          shouldDebug: getEnv('APP_DEBUG'),
-          wpJsonPath: wooSignalApp.wpLoginWpApiPath ?? "",
-        );
+            baseUrl: wooSignalApp.wpLoginBaseUrl ?? "",
+            shouldDebug: getEnv('APP_DEBUG'),
+            wpJsonPath: wooSignalApp.wpLoginWpApiPath ?? "",
+            nylo: true);
       }
 
       if (getEnv('DEFAULT_LOCALE', defaultValue: null) == null &&
@@ -98,8 +99,8 @@ class AppProvider implements NyProvider {
     nylo.addControllers(controllers);
     nylo.addApiDecoders(apiDecoders);
     nylo.useErrorStack();
-
-    await WPJsonAPI.wpAuth();
+    nylo.addAuthKey(Keys.auth);
+    await nylo.syncKeys(Keys.syncedOnBoot);
 
     return nylo;
   }

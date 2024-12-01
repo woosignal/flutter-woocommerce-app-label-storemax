@@ -16,20 +16,16 @@ import 'package:nylo_framework/nylo_framework.dart';
 import 'package:wp_json_api/models/responses/wp_user_delete_response.dart';
 import 'package:wp_json_api/wp_json_api.dart';
 
-class AccountDeletePage extends StatefulWidget {
-  static String path = "/account-delete";
-  AccountDeletePage({super.key});
+class AccountDeletePage extends NyStatefulWidget {
+  static RouteView path = ("/account-delete", (_) => AccountDeletePage());
 
-  @override
-  createState() => _AccountDeletePageState();
+  AccountDeletePage({super.key})
+      : super(child: () => _AccountDeletePageState());
 }
 
-class _AccountDeletePageState extends NyState<AccountDeletePage> {
+class _AccountDeletePageState extends NyPage<AccountDeletePage> {
   @override
-  init() async {}
-
-  @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(trans("Delete Account")),
@@ -81,11 +77,10 @@ class _AccountDeletePageState extends NyState<AccountDeletePage> {
             await WPJsonAPI.instance.api((request) => request.wpUserDelete());
       } on Exception catch (e) {
         NyLogger.error(e.toString());
-        showToastNotification(
-          context,
+        showToast(
           title: trans("Oops!"),
           description: trans("Something went wrong"),
-          style: ToastNotificationStyleType.DANGER,
+          style: ToastNotificationStyleType.danger,
         );
       }
 

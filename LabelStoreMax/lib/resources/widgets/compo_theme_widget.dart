@@ -23,7 +23,7 @@ import 'package:nylo_framework/nylo_framework.dart';
 import 'package:woosignal/models/response/woosignal_app.dart';
 
 class CompoThemeWidget extends StatefulWidget {
-  CompoThemeWidget({super.key, required this.wooSignalApp});
+  const CompoThemeWidget({super.key, required this.wooSignalApp});
   final WooSignalApp? wooSignalApp;
 
   @override
@@ -115,7 +115,7 @@ class CompoThemeWidgetState extends State<CompoThemeWidget> {
       tabWidget: CartPage(),
     ));
 
-    if (AppHelper.instance.appConfig!.wpLoginEnabled == 1) {
+    if (AppHelper.instance.appConfig?.wpLoginEnabled == 1) {
       items.add(BottomNavItem(
         id: 5,
         bottomNavigationBarItem: BottomNavigationBarItem(

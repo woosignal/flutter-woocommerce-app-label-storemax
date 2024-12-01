@@ -38,6 +38,13 @@ class Cart {
     return cartLineItems;
   }
 
+  Future<int?> indexForProduct(
+      {required int? productId, int? variationId}) async {
+    List<CartLineItem> cartLineItems = await getCart();
+    return cartLineItems.indexWhere(
+        (i) => i.productId == productId && i.variationId == variationId);
+  }
+
   Future addToCart({required CartLineItem cartLineItem}) async {
     List<CartLineItem> cartLineItems = await getCart();
 
@@ -129,11 +136,21 @@ class Cart {
     await saveCartToPref(cartLineItems: cartLineItems);
   }
 
+  Future<bool> removeCartItem(CartLineItem cartLineItem) async {
+    List<CartLineItem> cartLineItems = await getCart();
+    int index = cartLineItems.indexWhere((i) =>
+        i.productId == cartLineItem.productId &&
+        i.variationId == cartLineItem.variationId);
+    cartLineItems.removeAt(index);
+    await saveCartToPref(cartLineItems: cartLineItems);
+    return true;
+  }
+
   clear() async => await NyStorage.delete(SharedKey.cart);
 
   saveCartToPref({required List<CartLineItem> cartLineItems}) async {
     String json = jsonEncode(cartLineItems.map((i) => i.toJson()).toList());
-    await NyStorage.store(SharedKey.cart, json);
+    await NyStorage.save(SharedKey.cart, json);
   }
 
   Future<String> taxAmount(TaxRate? taxRate) async {

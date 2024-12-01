@@ -55,7 +55,7 @@ class ProductDetailFooterActionsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          if (product!.type != "external")
+          if (product?.type != "external")
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,7 +76,7 @@ class ProductDetailFooterActionsWidget extends StatelessWidget {
                       ),
                       onPressed: onRemoveQuantity as void Function()?,
                     ),
-                    ProductQuantity(productId: product!.id!),
+                    ProductQuantity(),
                     IconButton(
                       icon: Icon(
                         Icons.add_circle_outline,
@@ -94,16 +94,16 @@ class ProductDetailFooterActionsWidget extends StatelessWidget {
             children: <Widget>[
               Flexible(
                   child: Align(
+                alignment: Alignment.centerLeft,
                 child: AutoSizeText(
                   formatStringCurrency(
                       total:
-                          (parseWcPrice(product!.price) * quantity).toString()),
+                          (parseWcPrice(product?.price) * quantity).toString()),
                   style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.center,
                 ),
-                alignment: Alignment.centerLeft,
               )),
-              product!.type == "external"
+              product?.type == "external"
                   ? Flexible(
                       child: PrimaryButton(
                         title: trans("Buy Product"),

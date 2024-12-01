@@ -9,7 +9,10 @@
 //  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/resources/widgets/cart_item_container_widget.dart';
+import '/app/events/cart_remove_all_event.dart';
+import '/resources/widgets/buttons/buttons.dart';
+import '/resources/widgets/cart_product_item_widget.dart';
+import '/resources/widgets/shopping_cart_total_widget.dart';
 import '/resources/pages/account_login_page.dart';
 import '/resources/pages/checkout_confirmation_page.dart';
 import 'package:wp_json_api/wp_json_api.dart';
@@ -19,29 +22,29 @@ import '/app/models/checkout_session.dart';
 import '/app/models/customer_address.dart';
 import '/bootstrap/app_helper.dart';
 import '/bootstrap/helpers.dart';
-import '/resources/widgets/buttons.dart';
 import '/resources/widgets/safearea_widget.dart';
-import '/resources/widgets/text_row_widget.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
-class CartPage extends StatefulWidget {
-  static String path = "/cart";
-  CartPage();
+class CartPage extends NyStatefulWidget {
+  static RouteView path = ("/cart", (_) => CartPage());
 
-  @override
-  createState() => _CartPageState();
+  CartPage({super.key}) : super(child: () => _CartPageState());
 }
 
-class _CartPageState extends NyState<CartPage> {
-  _CartPageState();
-
+class _CartPageState extends NyPage<CartPage> {
   List<CartLineItem> _cartLines = [];
 
   @override
-  boot() async {
-    await _cartCheck();
-    CheckoutSession.getInstance.coupon = null;
-  }
+  LoadingStyle loadingStyle = LoadingStyle.skeletonizer();
+
+  @override
+  bool get stateManaged => true;
+
+  @override
+  get init => () async {
+        await _cartCheck();
+        CheckoutSession.getInstance.coupon = null;
+      };
 
   _cartCheck() async {
     List<CartLineItem> cart = await Cart.getInstance.getCart();
@@ -71,11 +74,10 @@ class _CartPageState extends NyState<CartPage> {
     }
 
     if (cartLineItems.isEmpty) {
-      showToastNotification(
-        context,
+      showToast(
         title: trans("Cart"),
         description: trans("You need items in your cart to checkout"),
-        style: ToastNotificationStyleType.WARNING,
+        style: ToastNotificationStyleType.warning,
         icon: Icons.shopping_cart,
       );
       return;
@@ -83,11 +85,10 @@ class _CartPageState extends NyState<CartPage> {
 
     if (!cartLineItems.every(
         (c) => c.stockStatus == 'instock' || c.stockStatus == 'onbackorder')) {
-      showToastNotification(
-        context,
+      showToast(
         title: trans("Cart"),
         description: trans("There is an item out of stock"),
-        style: ToastNotificationStyleType.WARNING,
+        style: ToastNotificationStyleType.warning,
         icon: Icons.shopping_cart,
       );
       return;
@@ -106,12 +107,13 @@ class _CartPageState extends NyState<CartPage> {
 
     if (!(await WPJsonAPI.wpUserLoggedIn())) {
       // show modal to ask customer if they would like to checkout as guest or login
+      if (!mounted) return;
       showAdaptiveDialog(
           context: context,
           builder: (context) {
             return AlertDialog.adaptive(
               content: Text("Checkout as guest or login to continue".tr())
-                  .headingMedium(context),
+                  .headingMedium(),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -125,7 +127,7 @@ class _CartPageState extends NyState<CartPage> {
                     onPressed: () {
                       Navigator.pop(context);
                       UserAuth.instance.redirect =
-                          CheckoutConfirmationPage.path;
+                          CheckoutConfirmationPage.path.name;
                       routeTo(AccountLoginPage.path);
                     },
                     child: Text("Login / Create an account".tr()),
@@ -142,60 +144,50 @@ class _CartPageState extends NyState<CartPage> {
     routeTo(CheckoutConfirmationPage.path);
   }
 
-  actionIncrementQuantity({required CartLineItem cartLineItem}) async {
-    if (cartLineItem.isManagedStock! &&
-        cartLineItem.quantity + 1 > cartLineItem.stockQuantity!) {
-      showToastNotification(
-        context,
-        title: trans("Cart"),
-        description: trans("Maximum stock reached"),
-        style: ToastNotificationStyleType.WARNING,
-        icon: Icons.shopping_cart,
-      );
-      return;
-    }
-    await Cart.getInstance
-        .updateQuantity(cartLineItem: cartLineItem, incrementQuantity: 1);
-    cartLineItem.quantity += 1;
-    setState(() {});
-  }
-
-  actionDecrementQuantity({required CartLineItem cartLineItem}) async {
-    if (cartLineItem.quantity - 1 <= 0) {
-      return;
-    }
-    await Cart.getInstance
-        .updateQuantity(cartLineItem: cartLineItem, incrementQuantity: -1);
-    cartLineItem.quantity -= 1;
-    setState(() {});
-  }
-
-  actionRemoveItem({required int index}) async {
-    await Cart.getInstance.removeCartItemForIndex(index: index);
-    _cartLines.removeAt(index);
-    showToastNotification(
-      context,
-      title: trans("Updated"),
-      description: trans("Item removed"),
-      style: ToastNotificationStyleType.WARNING,
-      icon: Icons.remove_shopping_cart,
-    );
-    setState(() {});
-  }
-
-  _clearCart() async {
-    await Cart.getInstance.clear();
-    _cartLines = [];
-    showToastNotification(context,
+  _showToastCartCleared() {
+    showToast(
         title: trans("Success"),
         description: trans("Cart cleared"),
-        style: ToastNotificationStyleType.SUCCESS,
+        style: ToastNotificationStyleType.success,
         icon: Icons.delete_outline);
-    setState(() {});
+  }
+
+  _showToastMaximumStockReached() {
+    showToast(
+      title: trans("Cart"),
+      description: trans("Maximum stock reached"),
+      style: ToastNotificationStyleType.warning,
+      icon: Icons.shopping_cart,
+    );
+  }
+
+  _showToastCartItemRemoved() {
+    showToast(
+      title: trans("Updated"),
+      description: trans("Item removed"),
+      style: ToastNotificationStyleType.warning,
+      icon: Icons.remove_shopping_cart,
+    );
   }
 
   @override
-  Widget build(BuildContext context) {
+  stateUpdated(data) {
+    if (data["action"] == "showToastMaximumStockReached") {
+      _showToastMaximumStockReached();
+      return;
+    }
+    if (data["action"] == "showToastCartItemRemoved") {
+      _showToastCartItemRemoved();
+      return;
+    }
+    if (data["action"] == "showToastCartCleared") {
+      _showToastCartCleared();
+      return;
+    }
+  }
+
+  @override
+  Widget view(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -203,22 +195,19 @@ class _CartPageState extends NyState<CartPage> {
           trans("Shopping Cart"),
         ),
         elevation: 1,
-        actions: <Widget>[
-          InkWell(
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            child: Align(
-              child: Padding(
-                child: Text(
-                  trans("Clear Cart"),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                padding: EdgeInsets.only(right: 8),
+        actions: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: EdgeInsets.only(right: 8),
+              child: Text(
+                trans("Clear Cart"),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
-              alignment: Alignment.centerLeft,
             ),
-            onTap: _clearCart,
-          )
+          ).onTap(() {
+            event<CartRemoveAllEvent>();
+          })
         ],
         centerTitle: true,
       ),
@@ -226,68 +215,62 @@ class _CartPageState extends NyState<CartPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
+          children: [
             Expanded(
-              child: afterLoad(
-                  child: () => _cartLines.isEmpty
-                      ? FractionallySizedBox(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              Icon(
-                                Icons.shopping_cart,
-                                size: 100,
-                                color: Colors.black45,
-                              ),
-                              Padding(
-                                child: Text(
-                                  trans("Empty Basket"),
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                                padding: EdgeInsets.only(top: 10),
-                              )
-                            ],
-                          ),
-                          heightFactor: 0.5,
-                          widthFactor: 1,
-                        )
-                      : ListView.builder(
-                          padding: const EdgeInsets.all(8),
-                          itemCount: _cartLines.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            CartLineItem cartLineItem = _cartLines[index];
-                            return CartItemContainer(
-                              cartLineItem: cartLineItem,
-                              actionIncrementQuantity: () =>
-                                  actionIncrementQuantity(
-                                      cartLineItem: cartLineItem),
-                              actionDecrementQuantity: () =>
-                                  actionDecrementQuantity(
-                                      cartLineItem: cartLineItem),
-                              actionRemoveItem: () =>
-                                  actionRemoveItem(index: index),
-                            );
-                          })),
+              child: NyListView(
+                child: (context, cartLineItem) {
+                  return CartProductItem(cartLineItem);
+                },
+                data: () async {
+                  if (hasInitComplete) {
+                    return await Cart.getInstance.getCart();
+                  }
+                  return _cartLines;
+                },
+                stateName: "shopping_cart_items_list_view",
+                loadingStyle: LoadingStyle.none(),
+                empty: FractionallySizedBox(
+                  heightFactor: 0.5,
+                  widthFactor: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      Icon(
+                        Icons.shopping_cart,
+                        size: 100,
+                        color: Colors.black45,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 0),
+                        child: Text(
+                          trans("Empty Basket"),
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ),
             Divider(
-              color: Colors.black45,
+              color: Colors.grey.shade200,
             ),
-            NyFutureBuilder<String>(
-              future: Cart.getInstance.getTotal(withFormat: true),
-              child: (BuildContext context, data) => Padding(
-                child: TextRowWidget(
-                  title: trans("Total"),
-                  text: isLoading() ? '' : data,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Flexible(
+                  flex: 3,
+                  child: Text(trans("Total"),
+                      style: Theme.of(context).textTheme.titleLarge),
                 ),
-                padding: EdgeInsets.only(bottom: 15, top: 15),
-              ),
-              loading: SizedBox.shrink(),
-            ),
-            PrimaryButton(
-              title: trans("PROCEED TO CHECKOUT"),
-              action: _actionProceedToCheckout,
-            ),
+                Flexible(flex: 3, child: ShoppingCartTotal())
+              ],
+            ).paddingSymmetric(vertical: 15),
+            Button.primary(
+                text: trans("PROCEED TO CHECKOUT"),
+                onPressed: _actionProceedToCheckout),
           ],
         ),
       ),

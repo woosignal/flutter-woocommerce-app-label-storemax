@@ -7,23 +7,24 @@ import 'package:wp_json_api/models/wp_user.dart';
 import 'package:wp_json_api/wp_json_api.dart';
 
 class NotificationsPage extends NyStatefulWidget {
-  static const path = '/notifications';
+  static RouteView path = ("/notifications", (_) => NotificationsPage());
 
-  NotificationsPage() : super(path, child: _NotificationsPageState());
+  NotificationsPage({super.key})
+      : super(child: () => _NotificationsPageState());
 }
 
-class _NotificationsPageState extends NyState<NotificationsPage> {
+class _NotificationsPageState extends NyPage<NotificationsPage> {
   WpUser? _wpUser;
 
   @override
-  boot() async {
-    _wpUser = (await WPJsonAPI.wpUser());
-  }
+  get init => () async {
+        _wpUser = (await WPJsonAPI.wpUser());
+      };
 
   @override
   Widget view(BuildContext context) {
     return PopScope(
-      onPopInvoked: (didPop) async {
+      onPopInvokedWithResult: (bool didPop, result) async {
         await NyNotification.markReadAll();
         updateState(NotificationIcon.state);
       },
@@ -34,13 +35,11 @@ class _NotificationsPageState extends NyState<NotificationsPage> {
             TextButton(
               onPressed: () async {
                 await NyNotification.markReadAll();
-                showStatusAlert(
-                  context,
-                  title: trans("Success"),
-                  subtitle: trans("All notifications marked as read"),
-                  duration: 1,
-                  icon: Icons.notifications,
-                );
+                showToast(
+                    title: trans('Success'),
+                    description: trans("All notifications marked as read"),
+                    icon: Icons.notifications,
+                    style: ToastNotificationStyleType.success);
                 setState(() {});
               },
               child: Text(
@@ -95,12 +94,12 @@ class _NotificationsPageState extends NyState<NotificationsPage> {
                             : FontWeight.w800),
                   ),
                   leading: Container(
-                    child: Icon(Icons.shopping_bag_outlined),
                     padding: EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(8),
                     ),
+                    child: Icon(Icons.shopping_bag_outlined),
                   ),
                   subtitle: NyRichText(
                     style: TextStyle(color: Colors.black),

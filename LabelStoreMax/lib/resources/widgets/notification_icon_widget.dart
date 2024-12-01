@@ -14,7 +14,7 @@ import '/resources/pages/notifications_page.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class NotificationIcon extends StatefulWidget {
-  NotificationIcon({super.key});
+  const NotificationIcon({super.key});
 
   static String state = "notification_icon";
 
@@ -30,10 +30,10 @@ class _NotificationIconState extends NyState<NotificationIcon> {
   }
 
   @override
-  boot() async {
-    totalNotifications =
-        (await NyNotification.allNotificationsNotRead()).length;
-  }
+  get init => () async {
+        totalNotifications =
+            (await NyNotification.allNotificationsNotRead()).length;
+      };
 
   @override
   stateUpdated(dynamic data) async {
@@ -55,8 +55,8 @@ class _NotificationIconState extends NyState<NotificationIcon> {
     return InkWell(
       onTap: () => routeTo(NotificationsPage.path),
       child: Badge.count(
-        child: Icon(Icons.notifications),
         count: totalNotifications,
+        child: Icon(Icons.notifications),
       ),
     );
   }

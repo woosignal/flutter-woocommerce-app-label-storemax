@@ -15,25 +15,22 @@ import '/resources/widgets/safearea_widget.dart';
 import '/resources/widgets/woosignal_ui.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
-class CustomerCountriesPage extends StatefulWidget {
-  static String path = "/customer-countries";
-  CustomerCountriesPage();
+class CustomerCountriesPage extends NyStatefulWidget {
+  static RouteView path =
+      ("/customer-countries", (_) => CustomerCountriesPage());
 
-  @override
-  createState() => _CustomerCountriesPageState();
+  CustomerCountriesPage({super.key})
+      : super(child: () => _CustomerCountriesPageState());
 }
 
-class _CustomerCountriesPageState extends State<CustomerCountriesPage> {
-  _CustomerCountriesPageState();
-
+class _CustomerCountriesPageState extends NyPage<CustomerCountriesPage> {
   List<DefaultShipping> _defaultShipping = [], _activeShippingResults = [];
   final TextEditingController _tfSearchCountry = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-    _getDefaultShipping();
-  }
+  get init => () {
+        _getDefaultShipping();
+      };
 
   _getDefaultShipping() async {
     _defaultShipping = await getDefaultShipping();
@@ -150,19 +147,19 @@ class _CustomerCountriesPageState extends State<CustomerCountriesPage> {
           DefaultShippingState state = defaultShipping.states[index];
 
           return InkWell(
-            child: Container(
-              child: Text(
-                state.name!,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              padding: EdgeInsets.only(top: 25, bottom: 25),
-            ),
             splashColor: Colors.grey,
             highlightColor: Colors.black12,
             onTap: () {
               Navigator.pop(context);
               _popWithShippingResult(defaultShipping, state: state);
             },
+            child: Container(
+              padding: EdgeInsets.only(top: 25, bottom: 25),
+              child: Text(
+                state.name!,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ),
           );
         },
         separatorBuilder: (cxt, i) => Divider(

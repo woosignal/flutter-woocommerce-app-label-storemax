@@ -23,11 +23,23 @@ if (flutterVersionName == null) {
 }
 
 android {
+    namespace "com.woosignal.android"
+    compileSdk 35
+    ndkVersion = "25.1.8937393"
+
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
     }
 
-    compileSdkVersion 34
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = 17
+    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -60,4 +72,6 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+}

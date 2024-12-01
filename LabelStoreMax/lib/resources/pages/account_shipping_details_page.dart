@@ -27,16 +27,16 @@ import 'package:wp_json_api/models/responses/wp_user_info_updated_response.dart'
 import 'package:wp_json_api/wp_json_api.dart';
 import 'package:validated/validated.dart' as validate;
 
-class AccountShippingDetailsPage extends StatefulWidget {
-  static String path = "/account-shipping-details";
-  AccountShippingDetailsPage();
+class AccountShippingDetailsPage extends NyStatefulWidget {
+  static RouteView path =
+      ("/account-shipping-details", (_) => AccountShippingDetailsPage());
 
-  @override
-  createState() => _AccountShippingDetailsPageState();
+  AccountShippingDetailsPage({super.key})
+      : super(child: () => _AccountShippingDetailsPageState());
 }
 
 class _AccountShippingDetailsPageState
-    extends NyState<AccountShippingDetailsPage> {
+    extends NyPage<AccountShippingDetailsPage> {
   _AccountShippingDetailsPageState();
 
   int activeTabIndex = 0;
@@ -84,9 +84,9 @@ class _AccountShippingDetailsPageState
       );
 
   @override
-  boot() async {
-    await _fetchUserDetails();
-  }
+  get init => () async {
+        await _fetchUserDetails();
+      };
 
   _setFieldsFromCustomerAddress(CustomerAddress? customerAddress,
       {required String type}) {
@@ -137,7 +137,7 @@ class _AccountShippingDetailsPageState
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -162,11 +162,13 @@ class _AccountShippingDetailsPageState
                         children: [
                           Container(
                             margin: EdgeInsets.symmetric(vertical: 0),
+                            height: 60,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
                                 Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 4),
                                   child: Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
@@ -192,11 +194,9 @@ class _AccountShippingDetailsPageState
                                               })),
                                     ],
                                   ),
-                                  padding: EdgeInsets.symmetric(vertical: 4),
                                 ),
                               ],
                             ),
-                            height: 60,
                           ),
                           Expanded(
                             child: Container(
@@ -242,11 +242,10 @@ class _AccountShippingDetailsPageState
       // Billing email is required for Stripe
       String billingEmail = _txtBillingEmailAddress.text;
       if (billingEmail.isNotEmpty && !validate.isEmail(billingEmail)) {
-        showToastNotification(
-          context,
+        showToast(
           title: trans("Oops"),
           description: trans("Please enter a valid shipping email"),
-          style: ToastNotificationStyleType.WARNING,
+          style: ToastNotificationStyleType.warning,
         );
         return;
       }
@@ -279,19 +278,19 @@ class _AccountShippingDetailsPageState
           ]),
         );
       } on Exception catch (_) {
-        showToastNotification(context,
+        showToast(
             title: trans("Oops!"),
             description: trans("Something went wrong"),
-            style: ToastNotificationStyleType.DANGER);
+            style: ToastNotificationStyleType.danger);
       }
 
       if (wpUserInfoUpdatedResponse != null &&
           wpUserInfoUpdatedResponse.status == 200) {
-        showToastNotification(context,
+        showToast(
             title: trans("Success"),
             description: trans("Account updated"),
-            style: ToastNotificationStyleType.SUCCESS);
-        Navigator.pop(context);
+            style: ToastNotificationStyleType.success);
+        pop();
       }
     });
   }
@@ -344,14 +343,13 @@ class _AccountShippingDetailsPageState
       wpUserInfoResponse =
           await WPJsonAPI.instance.api((request) => request.wpGetUserInfo());
     } on Exception catch (e) {
-      print(e.toString());
-      showToastNotification(
-        context,
+      printError(e.toString());
+      showToast(
         title: trans("Oops!"),
         description: trans("Something went wrong"),
-        style: ToastNotificationStyleType.DANGER,
+        style: ToastNotificationStyleType.danger,
       );
-      Navigator.pop(context);
+      pop();
     }
 
     if (wpUserInfoResponse != null && wpUserInfoResponse.status == 200) {

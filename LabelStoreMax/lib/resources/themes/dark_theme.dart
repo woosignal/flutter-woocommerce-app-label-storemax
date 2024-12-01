@@ -25,10 +25,10 @@ ThemeData darkTheme(ColorStyles darkColors) {
   TextTheme darkTheme =
       getAppTextTheme(appFont, defaultTextTheme.merge(_textTheme(darkColors)));
   return ThemeData(
-    primaryColor: darkColors.primaryContent,
-    primaryColorDark: darkColors.primaryContent,
+    primaryColor: darkColors.content,
+    primaryColorDark: darkColors.content,
     brightness: Brightness.dark,
-    focusColor: darkColors.primaryContent,
+    focusColor: darkColors.content,
     scaffoldBackgroundColor: darkColors.background,
     appBarTheme: AppBarTheme(
         surfaceTintColor: Colors.transparent,
@@ -43,11 +43,11 @@ ThemeData darkTheme(ColorStyles darkColors) {
       colorScheme: ColorScheme.light(primary: darkColors.buttonBackground),
     ),
     textButtonTheme: TextButtonThemeData(
-      style: TextButton.styleFrom(foregroundColor: darkColors.primaryContent),
+      style: TextButton.styleFrom(foregroundColor: darkColors.content),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: TextButton.styleFrom(
-          foregroundColor: darkColors.buttonPrimaryContent,
+          foregroundColor: darkColors.buttonContent,
           backgroundColor: darkColors.buttonBackground),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -64,7 +64,7 @@ ThemeData darkTheme(ColorStyles darkColors) {
     ),
     textTheme: darkTheme,
     colorScheme: ColorScheme.dark(
-        background: darkColors.background, primary: darkColors.primaryContent),
+        surface: darkColors.background, primary: darkColors.content),
   );
 }
 
@@ -75,7 +75,7 @@ ThemeData darkTheme(ColorStyles darkColors) {
 */
 
 TextTheme _textTheme(ColorStyles colors) {
-  Color primaryContent = colors.primaryContent;
+  Color primaryContent = colors.content;
   TextTheme textTheme = TextTheme().apply(displayColor: primaryContent);
   return textTheme.copyWith(
       titleLarge: TextStyle(color: primaryContent.withOpacity(0.8)),

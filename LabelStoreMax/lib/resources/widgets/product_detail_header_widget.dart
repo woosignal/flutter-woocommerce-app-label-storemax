@@ -29,31 +29,32 @@ class ProductDetailHeaderWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Flexible(
+            flex: 4,
             child: Text(
-              product!.name!,
+              product?.name ?? "",
               style:
                   Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 20),
               textAlign: TextAlign.left,
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
             ),
-            flex: 4,
           ),
           Flexible(
+            flex: 2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  formatStringCurrency(total: product!.price),
+                  formatStringCurrency(total: product?.price),
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                         fontSize: 20,
                       ),
                   textAlign: TextAlign.right,
                 ),
-                if (product!.onSale == true && product!.type != "variable")
+                if (product?.onSale == true && product?.type != "variable")
                   Text(
-                    formatStringCurrency(total: product!.regularPrice),
+                    formatStringCurrency(total: product?.regularPrice),
                     style: TextStyle(
                       color: Colors.grey,
                       decoration: TextDecoration.lineThrough,
@@ -61,7 +62,6 @@ class ProductDetailHeaderWidget extends StatelessWidget {
                   )
               ],
             ),
-            flex: 2,
           )
         ],
       ),

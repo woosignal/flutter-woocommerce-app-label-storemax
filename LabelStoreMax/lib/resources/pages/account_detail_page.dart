@@ -21,29 +21,25 @@ import 'package:wp_json_api/exceptions/invalid_user_token_exception.dart';
 import 'package:wp_json_api/models/responses/wc_customer_info_response.dart';
 import 'package:wp_json_api/wp_json_api.dart';
 
-class AccountDetailPage extends StatefulWidget {
-  static String path = "/account-detail";
+class AccountDetailPage extends NyStatefulWidget {
+  static RouteView path = ("/account-detail", (_) => AccountDetailPage());
+
+  AccountDetailPage({super.key, this.showLeadingBackButton = true})
+      : super(child: () => _AccountDetailPageState());
   final bool showLeadingBackButton;
-  const AccountDetailPage({this.showLeadingBackButton = true});
-  @override
-  createState() => _AccountDetailPageState();
 }
 
-class _AccountDetailPageState extends NyState<AccountDetailPage>
+class _AccountDetailPageState extends NyPage<AccountDetailPage>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
   int _currentTabIndex = 0;
   WCCustomerInfoResponse? _wcCustomerInfoResponse;
 
   @override
-  init() async {
-    _tabController = TabController(vsync: this, length: 2);
-  }
-
-  @override
-  boot() async {
-    await _fetchWpUserData();
-  }
+  get init => () async {
+        _tabController = TabController(vsync: this, length: 2);
+        await _fetchWpUserData();
+      };
 
   _fetchWpUserData() async {
     WCCustomerInfoResponse? wcCustomerInfoResponse;
@@ -51,19 +47,17 @@ class _AccountDetailPageState extends NyState<AccountDetailPage>
       wcCustomerInfoResponse =
           await WPJsonAPI.instance.api((request) => request.wcCustomerInfo());
     } on InvalidUserTokenException catch (_) {
-      showToastNotification(
-        context,
+      showToast(
         title: trans("Oops!"),
         description: trans("Something went wrong"),
-        style: ToastNotificationStyleType.DANGER,
+        style: ToastNotificationStyleType.danger,
       );
       await event<LogoutEvent>();
     } on Exception catch (_) {
-      showToastNotification(
-        context,
+      showToast(
         title: trans("Oops!"),
         description: trans("Something went wrong"),
-        style: ToastNotificationStyleType.DANGER,
+        style: ToastNotificationStyleType.danger,
       );
     }
 
@@ -79,11 +73,11 @@ class _AccountDetailPageState extends NyState<AccountDetailPage>
       appBar: AppBar(
         leading: widget.showLeadingBackButton
             ? Container(
+                margin: EdgeInsets.only(left: 0),
                 child: IconButton(
                   icon: Icon(Icons.arrow_back_ios),
                   onPressed: () => Navigator.pop(context),
                 ),
-                margin: EdgeInsets.only(left: 0),
               )
             : Container(),
         title: Text(trans("Account")),
@@ -96,6 +90,13 @@ class _AccountDetailPageState extends NyState<AccountDetailPage>
           Container(
             margin: EdgeInsets.only(top: 10, bottom: 10),
             padding: EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: (Theme.of(context).brightness == Brightness.light)
+                  ? wsBoxShadow()
+                  : null,
+              color: ThemeColor.get(context).backgroundContainer,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -106,12 +107,13 @@ class _AccountDetailPageState extends NyState<AccountDetailPage>
                   children: <Widget>[
                     Container(
                       margin: EdgeInsets.only(top: 10),
-                      child: getAvatar(),
                       height: 90,
                       width: 90,
+                      child: getAvatar(),
                     ),
                     Expanded(
                       child: Padding(
+                        padding: EdgeInsets.only(left: 16),
                         child: Text(
                           getFullName(),
                           style: TextStyle(
@@ -119,12 +121,12 @@ class _AccountDetailPageState extends NyState<AccountDetailPage>
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        padding: EdgeInsets.only(left: 16),
                       ),
                     ),
                   ],
                 ),
                 Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
                   child: TabBar(
                     tabs: [
                       Tab(text: trans("Orders")),
@@ -134,6 +136,7 @@ class _AccountDetailPageState extends NyState<AccountDetailPage>
                     indicatorSize: TabBarIndicatorSize.tab,
                     labelColor: Colors.white,
                     unselectedLabelColor: Colors.black87,
+                    dividerHeight: 0,
                     indicator: BubbleTabIndicator(
                       indicatorHeight: 30.0,
                       indicatorRadius: 5,
@@ -142,25 +145,17 @@ class _AccountDetailPageState extends NyState<AccountDetailPage>
                     ),
                     onTap: _tabsTapped,
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 8),
                 ),
               ],
             ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              boxShadow: (Theme.of(context).brightness == Brightness.light)
-                  ? wsBoxShadow()
-                  : null,
-              color: ThemeColor.get(context).backgroundContainer,
-            ),
           ),
           Expanded(
-            child: NySwitch(
-              widgets: [
+            child: IndexedStack(
+              index: _currentTabIndex,
+              children: [
                 AccountDetailOrdersWidget(),
                 AccountDetailSettingsWidget(),
               ],
-              indexSelected: _currentTabIndex,
             ),
           ),
         ],

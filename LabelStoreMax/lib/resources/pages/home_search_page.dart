@@ -9,24 +9,20 @@
 //  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/resources/widgets/store_logo_widget.dart';
+import '/resources/widgets/store_logo_widget.dart';
 import '/resources/pages/browse_search_page.dart';
 import '/bootstrap/app_helper.dart';
 import '/resources/widgets/buttons.dart';
 import '/resources/widgets/safearea_widget.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
-class HomeSearchPage extends StatefulWidget {
-  static String path = "/home-search";
-  HomeSearchPage();
+class HomeSearchPage extends NyStatefulWidget {
+  static RouteView path = ("/home-search", (_) => HomeSearchPage());
 
-  @override
-  createState() => _HomeSearchPageState();
+  HomeSearchPage({super.key}) : super(child: () => _HomeSearchPageState());
 }
 
-class _HomeSearchPageState extends State<HomeSearchPage> {
-  _HomeSearchPageState();
-
+class _HomeSearchPageState extends NyPage<HomeSearchPage> {
   final TextEditingController _txtSearchController = TextEditingController();
 
   _actionSearch() {
@@ -40,7 +36,7 @@ class _HomeSearchPageState extends State<HomeSearchPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: StoreLogo(height: 55),
@@ -60,11 +56,9 @@ class _HomeSearchPageState extends State<HomeSearchPage> {
               autoFocus: true,
               textCapitalization: TextCapitalization.sentences,
             ),
-            Container(
-              child: PrimaryButton(
-                title: trans("Search"),
-                action: _actionSearch,
-              ),
+            PrimaryButton(
+              title: trans("Search"),
+              action: _actionSearch,
             )
           ],
         ).withGap(20),

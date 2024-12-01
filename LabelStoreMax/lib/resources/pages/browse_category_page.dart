@@ -22,25 +22,23 @@ import 'package:woosignal/models/response/product_category.dart';
 import 'package:woosignal/models/response/product.dart' as ws_product;
 
 class BrowseCategoryPage extends NyStatefulWidget {
-  static String path = "/browse-category";
+  static RouteView path = ("/browse-category", (_) => BrowseCategoryPage());
 
-  BrowseCategoryPage({Key? key})
-      : super(path, key: key, child: _BrowseCategoryPageState());
+  BrowseCategoryPage({super.key})
+      : super(child: () => _BrowseCategoryPageState());
 }
 
-class _BrowseCategoryPageState extends NyState<BrowseCategoryPage> {
+class _BrowseCategoryPageState extends NyPage<BrowseCategoryPage> {
   ProductCategory? productCategory;
-  _BrowseCategoryPageState();
-
   SortByType? _sortByType;
 
   @override
-  init() async {
-    productCategory = widget.controller.data();
-  }
+  get init => () {
+        productCategory = widget.controller.data();
+      };
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Column(
@@ -55,7 +53,7 @@ class _BrowseCategoryPageState extends NyState<BrowseCategoryPage> {
           ],
         ),
         centerTitle: true,
-        actions: <Widget>[
+        actions: [
           IconButton(
             icon: Icon(Icons.tune),
             onPressed: _modalSheetTune,
@@ -76,7 +74,7 @@ class _BrowseCategoryPageState extends NyState<BrowseCategoryPage> {
           return products;
         },
         child: (context, product) {
-          return Container(
+          return SizedBox(
             height: 300,
             child: ProductItemContainer(
               product: product,

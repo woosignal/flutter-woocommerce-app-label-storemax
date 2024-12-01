@@ -15,10 +15,10 @@ import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'package:nylo_framework/nylo_framework.dart';
 
 class ProductImageViewerPage extends NyStatefulWidget {
-  static String path = "/product-images";
+  static RouteView path = ("/product-images", (_) => ProductImageViewerPage());
 
-  ProductImageViewerPage({Key? key})
-      : super(path, key: key, child: _ProductImageViewerPageState());
+  ProductImageViewerPage({super.key})
+      : super(child: () => _ProductImageViewerPageState());
 }
 
 class _ProductImageViewerPageState extends NyState<ProductImageViewerPage> {
@@ -26,15 +26,14 @@ class _ProductImageViewerPageState extends NyState<ProductImageViewerPage> {
   List<String?> _arrImageSrc = [];
 
   @override
-  void initState() {
-    Map<String, dynamic> imageData = widget.controller.data();
-    _initialIndex = imageData['index'];
-    _arrImageSrc = imageData['images'];
-    super.initState();
-  }
+  get init => () {
+        Map<String, dynamic> imageData = widget.controller.data();
+        _initialIndex = imageData['index'];
+        _arrImageSrc = imageData['images'];
+      };
 
   @override
-  Widget build(BuildContext context) {
+  Widget view(BuildContext context) {
     return Scaffold(
       body: SafeAreaWidget(
         child: Column(
@@ -53,11 +52,9 @@ class _ProductImageViewerPageState extends NyState<ProductImageViewerPage> {
                 scale: 0.95,
               ),
             ),
-            Container(
-              child: IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () => Navigator.pop(context),
-              ),
+            IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () => Navigator.pop(context),
             )
           ],
         ),

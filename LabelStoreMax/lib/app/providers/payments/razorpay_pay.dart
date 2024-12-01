@@ -34,7 +34,8 @@ razorPay(context, {TaxRate? taxRate}) async {
         title: "Error".tr(),
         description: trans("Something went wrong, please contact our store"),
       );
-      updateState(CheckoutConfirmationPage.path, data: {"reloadState": false});
+      updateState(CheckoutConfirmationPage.path.nyPageName(),
+          data: {"reloadState": false});
       return;
     }
     Cart.getInstance.clear();
@@ -45,8 +46,9 @@ razorPay(context, {TaxRate? taxRate}) async {
     showToastNotification(context,
         title: trans("Error"),
         description: response.message ?? "",
-        style: ToastNotificationStyleType.WARNING);
-    updateState(CheckoutConfirmationPage.path, data: {"reloadState": false});
+        style: ToastNotificationStyleType.warning);
+    updateState(CheckoutConfirmationPage.path.nyPageName(),
+        data: {"reloadState": false});
   });
 
   razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
@@ -68,7 +70,8 @@ razorPay(context, {TaxRate? taxRate}) async {
       }
     };
 
-    updateState(CheckoutConfirmationPage.path, data: {"reloadState": true});
+    updateState(CheckoutConfirmationPage.path.nyPageName(),
+        data: {"reloadState": true});
 
     razorpay.open(options);
   });

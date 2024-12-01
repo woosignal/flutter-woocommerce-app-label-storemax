@@ -47,3 +47,9 @@ extension DateTimeExtension on DateTime? {
     return null;
   }
 }
+
+/// [BuildContext] Extensions
+extension NyApp on BuildContext {
+  /// Get the current theme color
+  ColorStyles get color => ThemeColor.get(this);
+}
