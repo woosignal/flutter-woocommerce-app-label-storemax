@@ -72,7 +72,7 @@ class AppProvider implements NyProvider {
             baseUrl: wooSignalApp.wpLoginBaseUrl ?? "",
             shouldDebug: getEnv('APP_DEBUG'),
             wpJsonPath: wooSignalApp.wpLoginWpApiPath ?? "",
-            nylo: true);
+            nylo: nylo);
       }
 
       if (getEnv('DEFAULT_LOCALE', defaultValue: null) == null &&
@@ -99,7 +99,10 @@ class AppProvider implements NyProvider {
     nylo.addControllers(controllers);
     nylo.addApiDecoders(apiDecoders);
     nylo.useErrorStack();
-    nylo.addAuthKey(Keys.auth);
+
+    if (nylo.getAuthKey() == null) {
+      nylo.addAuthKey(Keys.auth);
+    }
     await nylo.syncKeys(Keys.syncedOnBoot);
 
     return nylo;

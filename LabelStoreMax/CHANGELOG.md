@@ -1,3 +1,8 @@
+## [8.0.1] - 2024-12-16
+
+* Add status alerts into the project
+* Dependency updates
+
 ## [8.0.0] - 2024-12-01
 
 * Update project for Nylo 6.x

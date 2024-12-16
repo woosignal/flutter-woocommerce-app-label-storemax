@@ -11,6 +11,8 @@
 import 'dart:convert';
 import 'package:collection/collection.dart' show IterableExtension;
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_app/bootstrap/status_alert/models/status_alert_media_configuration.dart';
+import 'package:flutter_app/bootstrap/status_alert/status_alert.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:wp_json_api/models/wp_user.dart';
 import 'package:wp_json_api/wp_json_api.dart';
@@ -32,7 +34,6 @@ import 'package:html/parser.dart';
 import 'package:math_expressions/math_expressions.dart';
 import 'package:money_formatter/money_formatter.dart';
 import 'package:nylo_framework/nylo_framework.dart';
-import 'package:status_alert/status_alert.dart';
 import 'package:woosignal/models/response/product.dart';
 import 'package:woosignal/models/response/tax_rate.dart';
 import 'package:woosignal/woosignal.dart';
@@ -402,10 +403,6 @@ String formatForDateTime(FormatType formatType) {
     case FormatType.time:
       {
         return "hh:mm a";
-      }
-    default:
-      {
-        return "";
       }
   }
 }
