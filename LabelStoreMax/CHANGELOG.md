@@ -1,3 +1,8 @@
+## [8.1.0] - 2025-01-05
+
+* Update copyright year
+* Dependency updates
+
 ## [8.0.1] - 2024-12-16
 
 * Add status alerts into the project
