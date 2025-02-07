@@ -1,3 +1,7 @@
+## [8.2.0] - 2025-02-07
+
+* Dependency updates
+
 ## [8.1.0] - 2025-01-05
 
 * Update copyright year
